@@ -177,6 +177,71 @@
                 display: block;
                 opacity: 1;
             }
+            /* --- console panel --- */
+            .fratily-debugbar-panel-console-ul{
+                display: block;
+                margin: 0;
+                width: 100%;
+                height: auto;
+                border: 0;
+                padding: 0;
+                list-style: none;
+            }
+            
+            .fratily-debugbar-panel-console-li{
+                display: block;
+                margin: 0;
+                width: 100%;
+                height: auto;
+                border-bottom: 1px #aaa solid;
+                padding: 0;
+                font-size: .8em;
+                line-height: 1.5em;
+            }
+            .fratily-debugbar-panel-console-li > span:before{
+                content: "";
+                display: inline-block;
+                margin: 0 .5em 0 0;
+                width: 1em;
+                height: 1em;
+                padding: 0;
+                background-color: #000;
+            }
+            /* --- timeline panel --- */
+            .fratily-debugbar-panel-timeline-dl{
+                margin: 0 auto;
+                width: 100%;
+                height: auto;
+                border: 0;
+                padding: 0;
+                clear: both;
+            }
+            .fratily-debugbar-panel-timeline-dt{
+                float: left;
+                margin: 0;
+                width: 20%;
+                height: 1.2em;
+                border: 0;
+                padding: 0;
+                background: #aaa;
+            }
+            .fratily-debugbar-panel-timeline-dd{
+                margin: 0 auto;
+                width: 98%;
+                height: 1.2em;
+                border: 0;
+                border-bottom: 1px #aaa solid;
+                padding: 0;
+                padding-left: 20%;
+            }
+            .fratily-debugbar-panel-timeline-dd-item{
+                margin: 0;
+                width: 0%;
+                height: 100%;
+                border: 0;
+                padding: 0;
+                background: #00f;
+            }
         </style>
     </head>
     <body>
