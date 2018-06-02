@@ -167,6 +167,7 @@ class DebugBar{
         if($headNode !== null && $bodyNode !== null){
             $headNode->appendChild($src->importNode($debugPath->query("//head/style")->item(0), true));
             $bodyNode->appendChild($src->importNode($debugPath->query("//body/div")->item(0), true));
+            $bodyNode->appendChild($src->importNode($debugPath->query("//body/div")->item(1), true));
             $bodyNode->appendChild($src->importNode($debugPath->query("//body/script")->item(0), true));
         }
 

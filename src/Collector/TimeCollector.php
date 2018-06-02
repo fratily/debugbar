@@ -106,14 +106,14 @@ class TimeCollector implements CollectorInterface{
      * {@inheritdoc}
      */
     public function getPanelClass(){
-        return \Fratily\Debug\Panel\TimeLinePanel::class;
+        return \Fratily\Debug\Panel\TimelinePanel::class;
     }
 
     /**
      * {@inheritdoc}
      */
     public function collect(){
-        $_end   = microtime(true) - $this->start;
+        $_end   = microtime(true);
         $result = [];
 
         foreach($this->names as $name){
@@ -125,7 +125,7 @@ class TimeCollector implements CollectorInterface{
                 "name"      => $name,
                 "start"     => $start,
                 "end"       => $end,
-                "runtime"   => $run,
+                "runtime"   => round($run * 1000, 2),
                 "start_p"   => round($start / ($_end - $this->start) * 100, 2),
                 "runtime_p" => round($run / ($_end - $this->start) * 100, 2),
             ];

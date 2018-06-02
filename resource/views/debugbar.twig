@@ -4,7 +4,7 @@
         <title>debugbar</title>
         <style>
             /* --- common class --- */
-            .fratily-debugbar-scroll-wrapper{
+            .fratily-debugbar-scroll-wrapper-y{
                 overflow-x: hidden;
                 overflow-y: scroll;
                 width: calc(100% + 17px);
@@ -15,7 +15,6 @@
             body{
                 margin-bottom: 30px;
             }
-            
             #fratily-debugbar{
                 overflow: hidden;
                 position: fixed;
@@ -29,7 +28,6 @@
                 padding: 0;
                 transition: all .3s ease;
             }
-            
             #fratily-debugbar-menu{
                 box-sizing: border-box;
                 overflow: hidden;
@@ -38,13 +36,12 @@
                 left: -200px;
                 margin: 0;
                 width: 200px;
-                height: 100%;
+                height: 300px;
                 background-color: #555;
                 color: #eee;
                 transition: all .3s ease;
             }
-            
-            #fratily-debugbar-menu-items{
+            #fratily-debugbar-menu-ul{
                 display: block;
                 margin: 0;
                 width: 200px;
@@ -52,21 +49,19 @@
                 border: 0;
                 padding: 0;
                 list-style: none;
-                cursor: pointer;
             }
-            
-            .fratily-debugbar-menu-item{
+            .fratily-debugbar-menu-ul-li{
                 display: block;
                 margin: 0;
                 width: 100%;
                 height: 30px;
-                border-bottom: 1px #aaa dotted;
+                border-bottom: 1px #aaa solid;
                 padding: 0;
                 text-align: center;
                 font-size: 18px;
                 line-height: 29px;
+                cursor: pointer;
             }
-            
             #fratily-debugbar-header{
                 overflow: hidden;
                 box-sizing: border-box;
@@ -80,7 +75,6 @@
                 background-color: #555;
                 transition: all .3s ease;
             }
-            
             #fratily-debugbar-header-menu-button{
                 box-sizing: border-box;
                 position: absolute;
@@ -95,9 +89,8 @@
                 opacity: .8;
                 cursor: pointer;
             }
-            
             #fratily-debugbar-body{
-                overflow: hidden;
+                overflow: auto;
                 box-sizing: border-box;
                 margin: 30px 0 0;
                 width: 100%;
@@ -105,13 +98,13 @@
                 padding: 0;
                 background-color: #ddd;
             }
-            
             .fratily-debugbar-body-item{
                 box-sizing: border-box;
                 margin: 0 auto;
                 width: 100%;
-                height: 100%;
-                padding: 10px 2%;
+                min-width: 500px;
+                height: auto;
+                padding: 10px 0;
                 opacity: 0;
                 transition: all .3s ease;
             }
@@ -133,37 +126,29 @@
                 background-color: #eee;
                 transition: all .3s ease;
             }
-            
             #fratily-debugbar-header-menu-button span:nth-of-type(1){
               top: 4px;
             }
-            
             #fratily-debugbar-header-menu-button span:nth-of-type(2){
               top: 13px;
             }
-            
             #fratily-debugbar-header-menu-button span:nth-of-type(3){
               bottom: 4px;
             }
-            
             #fratily-debugbar-header-menu-button:hover{
                 opacity: 1;
             }
             
             /* --- menu transform --- */
-            
             #fratily-debugbar-menu.open{
                 transform: translateX(200px);
             }
-
             #fratily-debugbar-menu.open + #fratily-debugbar-header #fratily-debugbar-header-menu-button span:nth-of-type(1){
               transform: translateY(9px) rotate(-45deg);
             }
-            
             #fratily-debugbar-menu.open + #fratily-debugbar-header #fratily-debugbar-header-menu-button span:nth-of-type(2){
               opacity: 0;
             }
-            
             #fratily-debugbar-menu.open + #fratily-debugbar-header #fratily-debugbar-header-menu-button span:nth-of-type(3){
               transform: translateY(-9px) rotate(45deg);
             }
@@ -172,11 +157,11 @@
             .fratily-debugbar-body-item[data-fratily-debugbar]{
                 display: none;
             }
-            
             .fratily-debugbar-body-item.select{
                 display: block;
                 opacity: 1;
             }
+            
             /* --- console panel --- */
             .fratily-debugbar-panel-console-ul{
                 display: block;
@@ -187,11 +172,10 @@
                 padding: 0;
                 list-style: none;
             }
-            
             .fratily-debugbar-panel-console-li{
                 display: block;
-                margin: 0;
-                width: 100%;
+                margin: 0 auto;
+                width: 98%;
                 height: auto;
                 border-bottom: 1px #aaa solid;
                 padding: 0;
@@ -210,7 +194,7 @@
             /* --- timeline panel --- */
             .fratily-debugbar-panel-timeline-dl{
                 margin: 0 auto;
-                width: 100%;
+                width: 98%;
                 height: auto;
                 border: 0;
                 padding: 0;
@@ -226,11 +210,13 @@
                 background: #aaa;
             }
             .fratily-debugbar-panel-timeline-dd{
+                box-sizing: border-box;
                 margin: 0 auto;
-                width: 98%;
+                width: 100%;
                 height: 1.2em;
                 border: 0;
                 border-bottom: 1px #aaa solid;
+                border-right: 1px #aaa solid;
                 padding: 0;
                 padding-left: 20%;
             }
@@ -245,12 +231,13 @@
         </style>
     </head>
     <body>
+        <div id="fratily-debugbar-padding"></div>
         <div id="fratily-debugbar">
             <div id="fratily-debugbar-menu">
-                <div class="fratily-debugbar-scroll-wrapper">
-                    <ul id="fratily-debugbar-menu-items">
+                <div class="fratily-debugbar-scroll-wrapper-y">
+                    <ul id="fratily-debugbar-menu-ul">
 {% for collector in collectors %}
-                        <li class="fratily-debugbar-menu-item" data-fratily-debugbar="{{ collector.name }}"><span>{{ collector.name }}</span></li>
+                        <li class="fratily-debugbar-menu-ul-li" data-fratily-debugbar="{{ collector.name }}"><span>{{ collector.name }}</span></li>
 {% endfor %}
                     </ul>
                 </div>
@@ -263,18 +250,16 @@
                 </div>
             </div>
             <div id="fratily-debugbar-body">
-                <div class="fratily-debugbar-scroll-wrapper">
 {% for collector in collectors %}
                     <div class="fratily-debugbar-body-item" data-fratily-debugbar="{{ collector.name }}">
                         {{ fratily_debugbar_panel(collector) }}
                     </div>
 {% endfor %}
-                </div>
             </div>
         </div>
         <script>
             (function(){
-                var menuItems = document.getElementsByClassName("fratily-debugbar-menu-item");
+                var menuItems = document.getElementsByClassName("fratily-debugbar-menu-ul-li");
                 var length    = menuItems.length;
                 
                 for(var i = 0; i < length; i++){
