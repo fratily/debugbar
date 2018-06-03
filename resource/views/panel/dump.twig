@@ -1,0 +1,8 @@
+<ul class="fratily-debugbar-panel-message-ul">
+{% for var in vars %}
+    <li class="fratily-debugbar-panel-message-li">
+        <span class="fratily-debugbar-icon-null"></span>
+        <pre>{{ dump(var) }}</pre>
+    </li>
+{% endfor %}
+</ul>
