@@ -216,7 +216,10 @@ class DebugBar{
     private function initTwig(){
         if($this->twig === null){
             $this->twig = new Environment(
-                new FilesystemLoader(__DIR__ . "/../resource/views")
+                new FilesystemLoader(__DIR__ . "/../resource/views"),
+                [
+                    "debug" => true,
+                ]
             );
 
             $this->twig->addFunction(
