@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            #fldb{overflow:visible;position:fixed;bottom:0;left:0;width:100%;height:300px;border-top:1px #eee solid;background:#fff;color:#333;font-size:16px;transition:all .3s ease;transform: translateY(100%);}
+            #fldb.open{transform: translateY(0);}
+            /* --- btn --- */
+            #fldb-btn{position:absolute;top:-30px;left:0;display:flex;justify-content:center;align-items:center;width:30px;height:30px;background:#555;opacity:.8;cursor:pointer;}
+            #fldb-btn:hover{opacity:1;}
+            #fldb-btn::before,#fldb-btn::after{position:absolute;content:"";display:block;width:50%;height:13%;background-color:#fff;transition:all .3s ease;}
+            #fldb-btn::before{transform:translateX(-26%) rotate(-45deg);}
+            #fldb-btn::after{transform:translateX(26%) rotate(45deg);}
+            #fldb.open #fldb-btn::before{transform:translateX(-26%) rotate(45deg);}
+            #fldb.open #fldb-btn::after{transform:translateX(26%) rotate(-45deg);}
+            /* --- menu --- */
+            #fldb-menu{overflow:visible;position:absolute;top:0;left:0;width:200px;height:100%;background-color:#eee;transition:all .3s ease;transform: translateX(-100%);}
+            #fldb-menu.open{transform:translateX(0);}
+            /* --- menu btn --- */
+            #fldb-menu-btn{position:absolute;right:-30px;display:flex;justify-content:center;align-items:center;width:30px;height:30px;background-color:#eee;opacity:1;cursor:pointer;}
+            #fldb-menu-btn:hover{opacity:.8;}
+            #fldb-menu-btn::before,#fldb-menu-btn span,#fldb-menu-btn::after{position:absolute;content:"";display:block;width:90%;height:13%;background-color:#555;transition:all .3s ease;}
+            #fldb-menu-btn::before{transform:translateY(-200%);}
+            #fldb-menu-btn::after{transform:translateY(200%);}
+            #fldb-menu.open #fldb-menu-btn::before{transform:translateY(0) rotate(-45deg);}
+            #fldb-menu.open #fldb-menu-btn span{opacity:0;}
+            #fldb-menu.open #fldb-menu-btn::after{transform:translateY(0) rotate(45deg);}
+            /* --- menu items --- */
+            #fldb-menu-scroll{overflow:hidden;width:100%;height:100%;}
+            #fldb-menu-items{display:block;overflow-x:hidden;overflow-y:scroll;margin:0;width:calc(100% + 17px);height:100%;border:0;padding:0;list-style:none;}
+            .fldb-menu-item{display:block;margin:0;width:100%;height:30px;border-bottom:1px #aaa solid;padding:0;background:#eee;text-align:center;font-size:18px;line-height:29px;cursor:pointer;transition:all .3s ease;}
+            .fldb-menu-item:hover{background:#555;color:#fff;}
+            /* --- body --- */
+            #fldb-body{overflow:hidden;margin:10px 10px 10px 40px;width:calc(100% - 40px - 10px);height:calc(100% - 10px - 10px);}
+            #fldb-body-scroll{overflow-x:scroll;overflow-y:scroll;width:calc(100% + 17px);height:calc(100% + 17px);}
+            .fldb-body-item{display:none;margin:0 auto;width:100%;min-width:500px;height:auto;}
+            .fldb-body-item.select{display:block;}
+            /* --- message panel --- */
+            .fldb-panel-message-list{display:block;margin:0;width:100%;height:auto;border:0;padding:0;list-style:none;}
+            .fldb-panel-message-item{position: relative;display:block;margin:0;width:100%;height:auto;min-height:1.5em;border-bottom:1px #eee solid;padding:0;font-size:.8em;line-height:1.5em;transition:all .3s ease;}
+            .fldb-panel-message-item:hover{background:#eee;}
+            .fldb-panel-message-item > span:first-child{position:absolute;top:.25em;left:0;}
+            .fldb-panel-message-item > span:last-child{position:relative;top:0;left:1.5em;}
+            /* --- timeline panel --- */
+            .fldb-panel-timeline-list{display:block;margin:0;width:100%;height:auto;border:0;padding:0;list-style:none;}
+            .fldb-panel-timeline-item{position: relative;display:block;margin:0;width:100%;height:1.2em;border-bottom:1px #eee solid;padding:0;transition:all .3s ease;}
+            .fldb-panel-timeline-item:hover{background:#eee;}
+            .fldb-panel-timeline-item > span:first-child{display:block;position:absolute;top:0;margin: .2em 0;height:.8em;background:#4be;}
+            .fldb-panel-timeline-item > span:last-child{display:block;position:absolute;top:0;left:0;width:20%;height:100%;font-size:.8em;}
+            /* --- icon --- */
+            .fldb-icon-error,.fldb-icon-info,.fldb-icon-warn,.fldb-icon-null{position:relative;display:flex;justify-content:center;align-items:center;}
+            .fldb-icon-error,.fldb-icon-info,.fldb-icon-null{width:1em;height:1em;border-radius:50%;}
+            .fldb-icon-error{background:#d55;}
+            .fldb-icon-info{background:#37b;}
+            .fldb-icon-warn{border-color:transparent transparent #ea5 transparent;border-style:solid;border-width:0 .5em .86em .5em;height:0;width:0;}
+            .fldb-icon-error::before,.fldb-icon-error::after{position:absolute;display:block;content:"";width:80%;height:.1em;background:#fff;}
+            .fldb-icon-error::before{transform:rotate(45deg);}
+            .fldb-icon-error::after{transform:rotate(-45deg);}
+            .fldb-icon-warn::before,.fldb-icon-warn::after{position:absolute;display:block;content:"";background:#555;}
+            .fldb-icon-warn::before{width:.1em;height:.4em;transform:translateY(.4em);}
+            .fldb-icon-warn::after{width:.12em;height:.12em;border-radius:50%;transform:translateY(.7em);}
+            .fldb-icon-info::before,.fldb-icon-info::after{position:absolute;display:block;content:"";background:#fff;}
+            .fldb-icon-info::before{width:.12em;height:.12em;border-radius:50%;transform:translateY(-0.3em);}
+            .fldb-icon-info::after{width:.1em;height:.5em;transform:translateY(.1em);}
+        </style>
+        <title>aa</title>
+    </head>
+    <body>class="open"
+        <div id="fldb">
+            <div id="fldb-btn"></div>
+            <div id="fldb-body">
+                <div id="fldb-body-scroll">
+                    <div class="fldb-body-item" data-fldb="Message">
+                        <ul class="fldb-panel-message-list">
+                            <li class="fldb-panel-message-item">
+                                <span class="fldb-icon-null"></span>
+                                <span>debug: This is debug</span>
+                            </li>
+                            <li class="fldb-panel-message-item">
+                                <span class="fldb-icon-null"></span>
+                                <span>debug: This is debug</span>
+                            </li>
+                            <li class="fldb-panel-message-item">
+                                <span class="fldb-icon-info"></span>
+                                <span>info: This is info</span>
+                            </li>
+                            <li class="fldb-panel-message-item">
+                                <span class="fldb-icon-warn"></span>
+                                <span>warning: This is warn</span>
+                            </li>
+                            <li class="fldb-panel-message-item">
+                                <span class="fldb-icon-error"></span>
+                                <span>error: This is error</span>
+                            </li>
+                            <li class="fldb-panel-message-item">
+                                <span class="fldb-icon-error"></span>
+                                <span>error: This is error<br>this is error.</span>
+                            </li>
+                            <li class="fldb-panel-message-item">
+                                <span class="fldb-icon-error"></span>
+                                <span>error: This is error<br>this is error.</span>
+                            </li>
+                            <li class="fldb-panel-message-item">
+                                <span class="fldb-icon-error"></span>
+                                <span>error: This is error<br>this is error.</span>
+                            </li>
+                            <li class="fldb-panel-message-item">
+                                <span class="fldb-icon-error"></span>
+                                <span>error: This is error<br>this is error.</span>
+                            </li>
+                            <li class="fldb-panel-message-item">
+                                <span class="fldb-icon-error"></span>
+                                <span>error: This is error<br>this is error.</span>
+                            </li>
+                            <li class="fldb-panel-message-item">
+                                <span class="fldb-icon-error"></span>
+                                <span>error: This is error<br>this is error.</span>
+                            </li>
+                            <li class="fldb-panel-message-item">
+                                <span class="fldb-icon-error"></span>
+                                <span>error: This is error<br>this is error.</span>
+                            </li>
+                            <li class="fldb-panel-message-item">
+                                <span class="fldb-icon-error"></span>
+                                <span>error: This is error<br>this is error.</span>
+                            </li>
+                            <li class="fldb-panel-message-item">
+                                <span class="fldb-icon-error"></span>
+                                <span>error: This is error<br>this is error.</span>
+                            </li>
+                            <li class="fldb-panel-message-item">
+                                <span class="fldb-icon-error"></span>
+                                <span>error: This is error<br>this is error.</span>
+                            </li>
+                            <li class="fldb-panel-message-item">
+                                <span class="fldb-icon-error"></span>
+                                <span>error: This is error<br>this is error.</span>
+                            </li>
+                            <li class="fldb-panel-message-item">
+                                <span class="fldb-icon-error"></span>
+                                <span>error: This is error<br>this is error.</span>
+                            </li>
+                            <li class="fldb-panel-message-item">
+                                <span class="fldb-icon-error"></span>
+                                <span>error: This is error<br>this is error.</span>
+                            </li>
+                            <li class="fldb-panel-message-item">
+                                <span class="fldb-icon-error"></span>
+                                <span>error: This is error<br>this is error.</span>
+                            </li>
+                            <li class="fldb-panel-message-item">
+                                <span class="fldb-icon-error"></span>
+                                <span>error: This is error<br>this is error.</span>
+                            </li>
+                            <li class="fldb-panel-message-item">
+                                <span class="fldb-icon-error"></span>
+                                <span>error: This is error<br>this is error.</span>
+                            </li>
+                            <li class="fldb-panel-message-item">
+                                <span class="fldb-icon-error"></span>
+                                <span>error: This is error<br>this is error.</span>
+                            </li>
+                            <li class="fldb-panel-message-item">
+                                <span class="fldb-icon-error"></span>
+                                <span>error: This is error<br>this is error.</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="fldb-body-item" data-fldb="Timeline">
+                        <ul class="fldb-panel-timeline-list">
+                            <li class="fldb-panel-timeline-item">
+                                <span style="left:0.01%;width:12.45%;"></span>
+                                <span>1(1000.6ms)</span>
+                            </li>
+                            <li class="fldb-panel-timeline-item">
+                                <span style="left:0.01%;width:24.89%;"></span>
+                                <span>2(2000.8ms)</span>
+                            </li>
+                            <li class="fldb-panel-timeline-item">
+                                <span style="left:24.9%;width:24.89%;"></span>
+                                <span>3(2000.62ms)</span>
+                            </li>
+                            <li class="fldb-panel-timeline-item">
+                                <span style="left:62.24%;width:37.76%;"></span>
+                                <span>4(3035.09ms)</span>
+                            </li>
+                            <li class="fldb-panel-timeline-item">
+                                <span style="left:74.69%;width:24.89%;"></span>
+                                <span>5(2001ms)</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="fldb-body-item" data-fldb="Dump">
+                        <ul class="fldb-panel-message-ul">
+                            <li class="fldb-panel-message-li">
+                                <span class="fldb-icon-null"></span>
+                                <pre>string(6) "string"</pre>
+                            </li>
+                            <li class="fldb-panel-message-li">
+                                <span class="fldb-icon-null"></span>
+                                <pre>int(123)</pre>
+                            </li>
+                            <li class="fldb-panel-message-li">
+                                <span class="fldb-icon-null"></span>
+                                <pre>float(123.456)</pre>
+                            </li>
+                            <li class="fldb-panel-message-li">
+                                <span class="fldb-icon-null"></span>
+                                <pre>array(52) {
+  [0]=&gt;
+  string(3) "md2"
+  [1]=&gt;
+  string(3) "md4"
+  [2]=&gt;
+  string(3) "md5"
+  [3]=&gt;
+  string(4) "sha1"
+  [4]=&gt;
+  string(6) "sha224"
+  [5]=&gt;
+  string(6) "sha256"
+  [6]=&gt;
+  string(6) "sha384"
+  [7]=&gt;
+  string(10) "sha512/224"
+  [8]=&gt;
+  string(10) "sha512/256"
+  [9]=&gt;
+  string(6) "sha512"
+  [10]=&gt;
+  string(8) "sha3-224"
+  [11]=&gt;
+  string(8) "sha3-256"
+  [12]=&gt;
+  string(8) "sha3-384"
+  [13]=&gt;
+  string(8) "sha3-512"
+}
+</pre>
+                            </li>
+                            <li class="fldb-panel-message-li">
+                                <span class="fldb-icon-null"></span>
+                                <pre>NULL</pre>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div id="fldb-menu">
+                <div id="fldb-menu-btn"><span></span></div>
+                <div id="fldb-menu-scroll">
+                    <ul id="fldb-menu-items">
+                        <li class="fldb-menu-item" data-fldb="Message"><span>Message</span></li>
+                        <li class="fldb-menu-item" data-fldb="Timeline"><span>Timeline</span></li>
+                        <li class="fldb-menu-item" data-fldb="Dump"><span>Dump</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <script>
+            (function(){
+                var menuItems = document.getElementsByClassName("fldb-menu-item");
+                var length    = menuItems.length;
+                
+                for(var i = 0; i < length; i++){
+                    if(menuItems[i].hasAttribute("data-fldb")){
+                        menuItems[i].addEventListener("click", function(){
+                            var tag      = this.getAttribute("data-fldb");
+                            var contents = document.getElementsByClassName("fldb-body-item");
+                            var length   = contents.length;
+                            var menu     = document.getElementById("fldb-menu");
+                            
+                            for(var i = 0; i < length; i++){
+                                if(contents[i].hasAttribute("data-fldb")){
+                                    if(tag === contents[i].getAttribute("data-fldb")){
+                                        contents[i].classList.add("select");
+                                    }else{
+                                        contents[i].classList.remove("select");
+                                    }
+                                }
+                            }
+                            
+                            if(menu){
+                                menu.classList.remove("open");
+                            }
+                        }, false);
+                    }
+                }
+                
+                document.getElementById("fldb-menu-btn").addEventListener("click", function(){
+                    var menu = document.getElementById("fldb-menu");
+
+                    if(menu){
+                        menu.classList.toggle("open");
+                    }
+                }, false);
+                
+                document.getElementById("fldb-btn").addEventListener("click", function(){
+                    var base = document.getElementById("fldb");
+
+                    if(base){
+                        base.classList.toggle("open");
+                    }
+                }, false);
+            }());
+        </script>
+    </body>
+</html>
