@@ -11,9 +11,9 @@
  * @license     MIT
  * @since       1.0.0
  */
-namespace Fratily\Debug\Collector;
+namespace Fratily\DebugBar\Collector;
 
-class MessageCollector implements CollectorInterface{
+class MessageCollector extends AbstractCollector{
 
     private $messages;
 
@@ -21,22 +21,18 @@ class MessageCollector implements CollectorInterface{
         $this->messages = [];
     }
 
-    public function addMessage(string $message){
-        $this->messages[]   = $message;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName(){
-        return "Message";
+    public function addMessage(string $message, $level = null){
+        $this->messages[]   = [
+            "level"     => $level,
+            "message"   => $message,
+        ];
     }
 
     /**
      * {@inheritdoc}
      */
     public function getPanelClass(){
-        return \Fratily\Debug\Panel\ConsolePanel::class;
+        return \Fratily\DebugBar\Panel\MessagePanel::class;
     }
 
     /**

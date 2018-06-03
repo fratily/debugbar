@@ -11,7 +11,7 @@
  * @license     MIT
  * @since       1.0.0
  */
-namespace Fratily\Debug\Collector;
+namespace Fratily\DebugBar\Collector;
 
 interface CollectorInterface{
 
@@ -21,6 +21,15 @@ interface CollectorInterface{
      * @return  string
      */
     public function getName();
+
+    /**
+     * コレクターの名前を設定する
+     *
+     * @param   string  $name
+     *
+     * @return  void
+     */
+    public function setName(string $name);
 
     /**
      * パネルクラス名を取得する

@@ -11,9 +11,9 @@
  * @license     MIT
  * @since       1.0.0
  */
-namespace Fratily\Debug\Collector;
+namespace Fratily\DebugBar\Collector;
 
-class TimeCollector implements CollectorInterface{
+class TimeCollector extends AbstractCollector{
 
     /**
      * @var float
@@ -98,15 +98,8 @@ class TimeCollector implements CollectorInterface{
     /**
      * {@inheritdoc}
      */
-    public function getName(){
-        return "Time";
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getPanelClass(){
-        return \Fratily\Debug\Panel\TimelinePanel::class;
+        return \Fratily\DebugBar\Panel\TimelinePanel::class;
     }
 
     /**
