@@ -1,0 +1,11 @@
+<ul class="fratily-debugbar-panel-message-ul">
+{% for message in messages %}
+    <li class="fratily-debugbar-panel-message-li">
+        {% if message.icon is null %}
+        <span></span>
+        {% else %}
+        <span class="fratily-debugbar-icon-{{message.icon}}"></span>
+        {% endif %}
+        <span>{{ message.level }}: {{ message.message }}</span></li>
+{% endfor %}
+</ul>
