@@ -228,6 +228,10 @@ class DebugBar{
                     [$this, "callbackRenderCollector"]
                 )
             );
+
+            $this->twig->addExtension(
+                new \Twig\Extension\DebugExtension
+            );
         }
     }
 
