@@ -36,7 +36,7 @@ class MessagePanel extends AbstractPanel{
         LogLevel::WARNING   => "warn",
         LogLevel::NOTICE    => "warn",
         LogLevel::INFO      => "info",
-        LogLevel::DEBUG     => null,
+        LogLevel::DEBUG     => "null",
     ];
 
     /**
