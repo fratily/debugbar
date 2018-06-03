@@ -11,7 +11,7 @@
  * @license     MIT
  * @since       1.0.0
  */
-namespace Fratily\Debug;
+namespace Fratily\DebugBar;
 
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
@@ -130,16 +130,18 @@ class DebugBar{
      * @throws  \LogicException
      * @throws  \InvalidArgumentException
      */
-    public function addCollector(Collector\CollectorInterface $collector){
-        if($collector->getName() === ""){
-            throw new \LogicException;  // 名前の空のコレクターは実装してはならない
+    public function addCollector(string $name, Collector\CollectorInterface $collector){
+        if($name === ""){
+            throw new \LogicException;  // 名前が空のコレクターは実装してはならない
         }
 
-        if($this->hasCollector($collector->getName())){
+        if($this->hasCollector($name)){
             throw new \InvalidArgumentException();  // 同名のコレクターは使用できない
         }
 
-        $this->collectors[$collector->getName()]    = $collector;
+        $collector->setName($name);
+
+        $this->collectors[$name]    = $collector;
 
         return $this;
     }
