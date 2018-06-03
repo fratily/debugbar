@@ -11,7 +11,7 @@
  * @license     MIT
  * @since       1.0.0
  */
-namespace Fratily\Debug\Panel;
+namespace Fratily\DebugBar\Panel;
 
 class TimelinePanel extends AbstractPanel{
 

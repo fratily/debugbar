@@ -11,9 +11,9 @@
  * @license     MIT
  * @since       1.0.0
  */
-namespace Fratily\Debug\Panel;
+namespace Fratily\DebugBar\Panel;
 
-use Fratily\Debug\Collector\CollectorInterface;
+use Fratily\DebugBar\Collector\CollectorInterface;
 
 interface PanelInterface{
 
