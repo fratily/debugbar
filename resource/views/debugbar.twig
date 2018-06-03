@@ -162,36 +162,6 @@
                 opacity: 1;
             }
             
-            /* --- console panel --- */
-            .fratily-debugbar-panel-console-ul{
-                display: block;
-                margin: 0;
-                width: 100%;
-                height: auto;
-                border: 0;
-                padding: 0;
-                list-style: none;
-            }
-            .fratily-debugbar-panel-console-li{
-                display: block;
-                margin: 0 auto;
-                width: 98%;
-                height: auto;
-                border-bottom: 1px #aaa solid;
-                padding: 0;
-                font-size: .8em;
-                line-height: 1.5em;
-            }
-            .fratily-debugbar-panel-console-li > span:before{
-                content: "";
-                display: inline-block;
-                margin: 0 .5em 0 0;
-                width: 1em;
-                height: 1em;
-                padding: 0;
-                background-color: #000;
-            }
-            
             /* --- message panel --- */
             .fratily-debugbar-panel-message-ul{
                 display: block;
@@ -208,6 +178,7 @@
                 margin: 0 auto;
                 width: 98%;
                 height: auto;
+                min-height: 1.5em;
                 border-bottom: 1px #aaa solid;
                 padding: 0;
                 font-size: .8em;
@@ -215,11 +186,11 @@
             }
             .fratily-debugbar-panel-message-li > span:first-child{
                 position: absolute;
-                top: 0;
+                top: .25em;
                 left: 0;
             }
             .fratily-debugbar-panel-message-li > span:last-child{
-                position: absolute;
+                position: relative;
                 top: 0;
                 left: 1.5em;
             }
@@ -263,14 +234,16 @@
             /* --- icon --- */
             .fratily-debugbar-icon-error,
             .fratily-debugbar-icon-info,
-            .fratily-debugbar-icon-warn{
+            .fratily-debugbar-icon-warn,
+            .fratily-debugbar-icon-null{
                 position:relative;
                 display: flex;
                 justify-content: center;
                 align-items: center;
             }
             .fratily-debugbar-icon-error,
-            .fratily-debugbar-icon-info{
+            .fratily-debugbar-icon-info,
+            .fratily-debugbar-icon-null{
                 width: 1em;
                 height: 1em;
                 border-radius: 50%;
