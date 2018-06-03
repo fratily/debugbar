@@ -1,6 +1,6 @@
 {
-    "name": "fratily/debug",
-    "keywords": ["debug", "Fratily"],
+    "name": "fratily/debugbar",
+    "keywords": ["debugbar", "Fratily"],
     "authors": [
         {
             "name": "Kento Oka",
@@ -17,7 +17,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Fratily\\Debug\\": "src/"
+            "Fratily\\DebugBar\\": "src/"
         }
     },
     "require-dev": {
@@ -25,7 +25,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Fratily\\Tests\\Framework\\": "tests/"
+            "Fratily\\Tests\\DebugBar\\": "tests/"
         }
     },
     "scripts": {

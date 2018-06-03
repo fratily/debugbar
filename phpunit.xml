@@ -14,7 +14,7 @@
     </php>
 
     <testsuites>
-        <testsuite name="fratily/debug test suite">
+        <testsuite name="fratily/debugbar test suite">
             <directory>./tests</directory>
         </testsuite>
     </testsuites>
