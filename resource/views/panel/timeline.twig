@@ -1,10 +1,8 @@
-<dl class="fratily-debugbar-panel-timeline-dl">
-{% for time in times %}
-    <dt class="fratily-debugbar-panel-timeline-dt">
-        <span>{{ time.name }}({{ time.runtime }}ms)</span>
-    </dt>
-    <dd class="fratily-debugbar-panel-timeline-dd">
-        <div class="fratily-debugbar-panel-timeline-dd-item" style="margin-left:{{ time.start_p }}%;width:{{ time.runtime_p }}%;"></div>
-    </dd>
-{% endfor %}
-</dl>
+<ul class="fldb-panel-timeline-list">
+    {% for time in times %}
+    <li class="fldb-panel-timeline-item">
+        <div style="left:{{ time.start_p }}%;width:{{ time.runtime_p }}%;"></div>
+        <div>{{ time.name }}({{ time.runtime }}ms)</div>
+    </li>
+    {% endfor %}
+</ul>

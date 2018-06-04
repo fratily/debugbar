@@ -21,8 +21,19 @@ class VarCollector extends AbstractCollector{
         $this->vars = [];
     }
 
-    public function dump($var){
-        $this->vars[]   = $var;
+    public function dump($var, string $file = null, int $line = null){
+        if($file === null || $line === null){
+            $trace  = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 1);
+
+            $file   = $trace[0]["file"] ?? "unknown";
+            $line   = $trace[0]["line"] ?? 0;
+        }
+
+        $this->vars[]   = [
+            "val"   => $var,
+            "file"  => $file,
+            "line"  => $line,
+        ];
     }
 
     /**

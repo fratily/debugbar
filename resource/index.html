@@ -68,6 +68,24 @@
             .fldb-icon-info::before,.fldb-icon-info::after{position:absolute;display:block;content:"";background:#fff;}
             .fldb-icon-info::before{width:.12em;height:.12em;border-radius:50%;transform:translateY(-0.3em);}
             .fldb-icon-info::after{width:.1em;height:.5em;transform:translateY(.1em);}
+            /* --- dl --- */
+            .fldb-blk-dl{margin:0;width:100%;height:auto;padding:0;font-size:.8em;line-height:1.2em;}
+            .fldb-blk-dl_dt{
+                float:left;
+                margin:0;
+                width:30%;
+                height:auto;
+                padding:0;
+            }
+            .fldb-blk-dl_dd{
+                box-sizing:border-box;
+                margin:0;
+                width: 100%;
+                height:auto;
+                color:#555;
+                padding:0 0 0 30%;
+            }
+            .fldb-blk-dl_dd:after{content:"";display:block;clear:both;}
         </style>
         <title>aa</title>
     </head>
@@ -76,6 +94,26 @@
             <div id="fldb-btn"></div>
             <div id="fldb-body">
                 <div id="fldb-body-scroll">
+                    <div class="fldb-body-item" data-fldb="Request">
+                        <dl class="fldb-blk-dl">
+                            <dt class="fldb-blk-dl_dt">Protocol</dt>
+                            <dd class="fldb-blk-dl_dd">HTTP/1.1</dd>
+                            <dt class="fldb-blk-dl_dt">Method</dt>
+                            <dd class="fldb-blk-dl_dd">POST</dd>
+                            <dt class="fldb-blk-dl_dt">Host</dt>
+                            <dd class="fldb-blk-dl_dd">example.com</dd>
+                            <dt class="fldb-blk-dl_dt">path</dt>
+                            <dd class="fldb-blk-dl_dd">/index.php</dd>
+                            <dt class="fldb-blk-dl_dt">query</dt>
+                            <dd class="fldb-blk-dl_dd">foo=bar</dd>
+                        </dl>
+                        <section>
+                            <h2>Request Header</h2>
+                            <pre>GET /index.php?foo=bar
+                                
+</pre>
+                        </section>
+                    </div>
                     <div class="fldb-body-item" data-fldb="Message">
                         <ul class="fldb-panel-message-list">
                             <li class="fldb-panel-message-item">
@@ -189,6 +227,7 @@
                 <div id="fldb-menu-btn"><span></span></div>
                 <div id="fldb-menu-scroll">
                     <ul id="fldb-menu-items">
+                        <li class="fldb-menu-item" data-fldb="Request"><span>Request</span></li>
                         <li class="fldb-menu-item" data-fldb="Message"><span>Message</span></li>
                         <li class="fldb-menu-item" data-fldb="Timeline"><span>Timeline</span></li>
                         <li class="fldb-menu-item" data-fldb="Dump"><span>Dump</span></li>

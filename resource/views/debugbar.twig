@@ -3,363 +3,113 @@
     <head>
         <title>debugbar</title>
         <style>
-            /* --- common class --- */
-            .fratily-debugbar-scroll-wrapper-y{
-                overflow-x: hidden;
-                overflow-y: scroll;
-                width: calc(100% + 17px);
-                height: 100%;
-            }
-            
-            /* --- base layout --- */
-            body{
-                margin-bottom: 30px;
-            }
-            #fratily-debugbar{
-                overflow: hidden;
-                position: fixed;
-                box-sizing: border-box;
-                bottom: -300px;
-                left: 0;
-                margin: 0;
-                width: 100%;
-                height: 330px;
-                border: 0;
-                padding: 0;
-                transition: all .3s ease;
-            }
-            #fratily-debugbar-menu{
-                box-sizing: border-box;
-                overflow: hidden;
-                position: absolute;
-                top: 30px;
-                left: -200px;
-                margin: 0;
-                width: 200px;
-                height: 300px;
-                background-color: #555;
-                color: #eee;
-                transition: all .3s ease;
-            }
-            #fratily-debugbar-menu-ul{
-                display: block;
-                margin: 0;
-                width: 200px;
-                height: auto;
-                border: 0;
-                padding: 0;
-                list-style: none;
-            }
-            .fratily-debugbar-menu-ul-li{
-                display: block;
-                margin: 0;
-                width: 100%;
-                height: 30px;
-                border-bottom: 1px #aaa solid;
-                padding: 0;
-                text-align: center;
-                font-size: 18px;
-                line-height: 29px;
-                cursor: pointer;
-            }
-            #fratily-debugbar-header{
-                overflow: hidden;
-                box-sizing: border-box;
-                position: absolute;
-                top: 0;
-                left: 0;
-                margin: 0;
-                width: 100%;
-                height: 30px;
-                padding: 0;
-                background-color: #555;
-                transition: all .3s ease;
-            }
-            #fratily-debugbar-header-menu-button{
-                box-sizing: border-box;
-                position: absolute;
-                top: 0;
-                left: 0;
-                margin: 0;
-                width: 30px;
-                height: 30px;
-                border: 0;
-                padding: 0;
-                background-color: #555;
-                opacity: .8;
-                cursor: pointer;
-            }
-            #fratily-debugbar-body{
-                overflow: auto;
-                box-sizing: border-box;
-                margin: 30px 0 0;
-                width: 100%;
-                height: calc(100% - 30px);
-                padding: 0;
-                background-color: #ddd;
-            }
-            .fratily-debugbar-body-item{
-                box-sizing: border-box;
-                margin: 0 auto;
-                width: 100%;
-                min-width: 500px;
-                height: auto;
-                padding: 10px 0;
-                opacity: 0;
-                transition: all .3s ease;
-            }
-            
-            /* --- base taransform --- */
-            #fratily-debugbar.open{
-                transform: translateY(-300px);
-            }
-            
-            /* --- menu button design and transform */
-            #fratily-debugbar-header-menu-button span{
-                display: block;
-                box-sizing: border-box;
-                position: absolute;
-                left: 5%;
-                width: 90%;
-                height: 4px;
-                border-radius: 4px;
-                background-color: #eee;
-                transition: all .3s ease;
-            }
-            #fratily-debugbar-header-menu-button span:nth-of-type(1){
-              top: 4px;
-            }
-            #fratily-debugbar-header-menu-button span:nth-of-type(2){
-              top: 13px;
-            }
-            #fratily-debugbar-header-menu-button span:nth-of-type(3){
-              bottom: 4px;
-            }
-            #fratily-debugbar-header-menu-button:hover{
-                opacity: 1;
-            }
-            
-            /* --- menu transform --- */
-            #fratily-debugbar-menu.open{
-                transform: translateX(200px);
-            }
-            #fratily-debugbar-menu.open + #fratily-debugbar-header #fratily-debugbar-header-menu-button span:nth-of-type(1){
-              transform: translateY(9px) rotate(-45deg);
-            }
-            #fratily-debugbar-menu.open + #fratily-debugbar-header #fratily-debugbar-header-menu-button span:nth-of-type(2){
-              opacity: 0;
-            }
-            #fratily-debugbar-menu.open + #fratily-debugbar-header #fratily-debugbar-header-menu-button span:nth-of-type(3){
-              transform: translateY(-9px) rotate(45deg);
-            }
-            
-            /* --- body item --- */
-            .fratily-debugbar-body-item[data-fratily-debugbar]{
-                display: none;
-            }
-            .fratily-debugbar-body-item.select{
-                display: block;
-                opacity: 1;
-            }
-            
+            #fldb{overflow:visible;position:fixed;bottom:0;left:0;width:100%;height:300px;border-top:1px #eee solid;background:#fff;color:#333;font-size:16px;transition:all .3s ease;transform: translateY(100%);}
+            #fldb.open{transform: translateY(0);}
+            /* --- btn --- */
+            #fldb-btn{position:absolute;top:-30px;left:0;display:flex;justify-content:center;align-items:center;width:30px;height:30px;background:#555;opacity:.8;cursor:pointer;}
+            #fldb-btn:hover{opacity:1;}
+            #fldb-btn::before,#fldb-btn::after{position:absolute;content:"";display:block;width:50%;height:13%;background-color:#fff;transition:all .3s ease;}
+            #fldb-btn::before{transform:translateX(-26%) rotate(-45deg);}
+            #fldb-btn::after{transform:translateX(26%) rotate(45deg);}
+            #fldb.open #fldb-btn::before{transform:translateX(-26%) rotate(45deg);}
+            #fldb.open #fldb-btn::after{transform:translateX(26%) rotate(-45deg);}
+            /* --- menu --- */
+            #fldb-menu{overflow:visible;position:absolute;top:0;left:0;width:200px;height:100%;background-color:#eee;transition:all .3s ease;transform: translateX(-100%);}
+            #fldb-menu.open{transform:translateX(0);}
+            /* --- menu btn --- */
+            #fldb-menu-btn{position:absolute;right:-30px;display:flex;justify-content:center;align-items:center;width:30px;height:30px;background-color:#eee;opacity:1;cursor:pointer;}
+            #fldb-menu-btn:hover{opacity:.8;}
+            #fldb-menu-btn::before,#fldb-menu-btn span,#fldb-menu-btn::after{position:absolute;content:"";display:block;width:90%;height:13%;background-color:#555;transition:all .3s ease;}
+            #fldb-menu-btn::before{transform:translateY(-200%);}
+            #fldb-menu-btn::after{transform:translateY(200%);}
+            #fldb-menu.open #fldb-menu-btn::before{transform:translateY(0) rotate(-45deg);}
+            #fldb-menu.open #fldb-menu-btn span{opacity:0;}
+            #fldb-menu.open #fldb-menu-btn::after{transform:translateY(0) rotate(45deg);}
+            /* --- menu items --- */
+            #fldb-menu-scroll{overflow:hidden;width:100%;height:100%;}
+            #fldb-menu-items{display:block;overflow-x:hidden;overflow-y:scroll;margin:0;width:calc(100% + 17px);height:100%;border:0;padding:0;list-style:none;}
+            .fldb-menu-item{display:block;margin:0;width:100%;height:30px;border-bottom:1px #aaa solid;padding:0;background:#eee;text-align:center;font-size:18px;line-height:29px;cursor:pointer;transition:all .3s ease;}
+            .fldb-menu-item:hover{background:#555;color:#fff;}
+            /* --- body --- */
+            #fldb-body{overflow:hidden;margin:10px 10px 10px 40px;width:calc(100% - 40px - 10px);height:calc(100% - 10px - 10px);}
+            #fldb-body-scroll{overflow-x:scroll;overflow-y:scroll;width:calc(100% + 17px);height:calc(100% + 17px);}
+            .fldb-body-item{display:none;margin:0 auto;width:100%;min-width:500px;height:auto;}
+            .fldb-body-item.select{display:block;}
             /* --- message panel --- */
-            .fratily-debugbar-panel-message-ul{
-                display: block;
-                margin: 0;
-                width: 100%;
-                height: auto;
-                border: 0;
-                padding: 0;
-                list-style: none;
-            }
-            .fratily-debugbar-panel-message-li{
-                position: relative;
-                display: block;
-                margin: 0 auto;
-                width: 98%;
-                height: auto;
-                min-height: 1.5em;
-                border-bottom: 1px #aaa solid;
-                padding: 0;
-                font-size: .8em;
-                line-height: 1.5em;
-            }
-            .fratily-debugbar-panel-message-li > span:first-child{
-                position: absolute;
-                top: .25em;
-                left: 0;
-            }
-            .fratily-debugbar-panel-message-li > span:last-child{
-                position: relative;
-                top: 0;
-                left: 1.5em;
-            }
+            .fldb-panel-message-list{display:block;margin:0;width:100%;height:auto;border:0;padding:0;list-style:none;}
+            .fldb-panel-message-item{position: relative;display:block;margin:0;width:100%;height:auto;min-height:1.5em;border-bottom:1px #eee solid;padding:0;font-size:.8em;line-height:1.5em;transition:all .3s ease;}
+            .fldb-panel-message-item:hover{background:#eee;}
+            .fldb-panel-message-item > span:first-child{position:absolute;top:.25em;left:0;}
+            .fldb-panel-message-item > span:last-child{position:relative;top:0;left:1.5em;}
             /* --- timeline panel --- */
-            .fratily-debugbar-panel-timeline-dl{
-                margin: 0 auto;
-                width: 98%;
-                height: auto;
-                border: 0;
-                padding: 0;
-                clear: both;
-            }
-            .fratily-debugbar-panel-timeline-dt{
-                float: left;
-                margin: 0;
-                width: 20%;
-                height: 1.2em;
-                border: 0;
-                padding: 0;
-                background: #aaa;
-            }
-            .fratily-debugbar-panel-timeline-dd{
-                box-sizing: border-box;
-                margin: 0 auto;
-                width: 100%;
-                height: 1.2em;
-                border: 0;
-                border-bottom: 1px #aaa solid;
-                border-right: 1px #aaa solid;
-                padding: 0;
-                padding-left: 20%;
-            }
-            .fratily-debugbar-panel-timeline-dd-item{
-                margin: 0;
-                width: 0%;
-                height: 100%;
-                border: 0;
-                padding: 0;
-                background: #00f;
-            }
+            .fldb-panel-timeline-list{display:block;margin:0;width:100%;height:auto;border:0;padding:0;list-style:none;}
+            .fldb-panel-timeline-item{position: relative;display:block;margin:0;width:100%;height:1.2em;border-bottom:1px #eee solid;padding:0;transition:all .3s ease;}
+            .fldb-panel-timeline-item:hover{background:#eee;}
+            .fldb-panel-timeline-item > div:first-child{position:absolute;top:0;margin: .2em 0;height:.8em;background:#4be;}
+            .fldb-panel-timeline-item > div:last-child{position:absolute;top:0;left:0;width:20%;height:100%;font-size:.8em;}
+            /* --- dump panel --- */
+            .fldb-panel-dump-list{display:block;margin:0;width:100%;height:auto;border:0;padding:0;list-style:none;}
+            .fldb-panel-dump-item{display:block;margin:0;width:100%;height:auto;border-bottom:1px #eee solid;padding:0;transition:all .3s ease;}
+            .fldb-panel-dump-item:hover{background:#eee;}
+            .fldb-panel-dump-item > div:first-child{margin:0;width:100%;height:1.2em;font-size:.6em;line-height:1.2em;color:#888;}
+            .fldb-panel-dump-item > div:last-child{box-sizing:border-box;margin:0;width:100%;height:auto;padding:.5em 2%;font-size:.8em;line-height: 1.2em;}
+            .fldb-panel-dump-item > div:last-child pre{margin:0;width:100%;height:auto;padding:0;}
             /* --- icon --- */
-            .fratily-debugbar-icon-error,
-            .fratily-debugbar-icon-info,
-            .fratily-debugbar-icon-warn,
-            .fratily-debugbar-icon-null{
-                position:relative;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-            }
-            .fratily-debugbar-icon-error,
-            .fratily-debugbar-icon-info,
-            .fratily-debugbar-icon-null{
-                width: 1em;
-                height: 1em;
-                border-radius: 50%;
-            }
-            .fratily-debugbar-icon-error{
-                background: #d55;
-            }
-            .fratily-debugbar-icon-info{
-                background: #37b;
-            }
-            .fratily-debugbar-icon-warn{
-                border-color: transparent transparent #ea5 transparent;
-                border-style: solid;
-                border-width: 0 .5em .86em .5em;
-                height: 0;
-                width: 0;
-            }
-
-            .fratily-debugbar-icon-error::before,
-            .fratily-debugbar-icon-error::after{
-                position: absolute;
-                display: block;
-                content: "";
-                width: 80%;
-                height: .1em;
-                background: #fff;
-            }
-            .fratily-debugbar-icon-error::before{
-                transform: rotate(45deg);
-            }
-            .fratily-debugbar-icon-error::after{
-                transform: rotate(-45deg);
-            }
-
-            .fratily-debugbar-icon-warn::before,
-            .fratily-debugbar-icon-warn::after{
-                position: absolute;
-                display: block;
-                content: "";
-                background: #555;
-            }
-            .fratily-debugbar-icon-warn::before{
-                width: .1em;
-                height: .4em;
-                transform: translateY(.4em);
-            }
-            .fratily-debugbar-icon-warn::after{
-                width: .12em;
-                height: .12em;
-                border-radius: 50%;
-                transform: translateY(.7em);
-            }
-
-            .fratily-debugbar-icon-info::before,
-            .fratily-debugbar-icon-info::after{
-                position: absolute;
-                display: block;
-                content: "";
-                background: #fff;
-            }
-            .fratily-debugbar-icon-info::before{
-                width: .12em;
-                height: .12em;
-                border-radius: 50%;
-                transform: translateY(-0.3em);
-            }
-            .fratily-debugbar-icon-info::after{
-                width: .1em;
-                height: .5em;
-                transform: translateY(.1em);
-            }
+            .fldb-icon-error,.fldb-icon-info,.fldb-icon-warn,.fldb-icon-null{position:relative;display:flex;justify-content:center;align-items:center;}
+            .fldb-icon-error,.fldb-icon-info,.fldb-icon-null{width:1em;height:1em;border-radius:50%;}
+            .fldb-icon-error{background:#d55;}
+            .fldb-icon-info{background:#37b;}
+            .fldb-icon-warn{border-color:transparent transparent #ea5 transparent;border-style:solid;border-width:0 .5em .86em .5em;height:0;width:0;}
+            .fldb-icon-error::before,.fldb-icon-error::after{position:absolute;display:block;content:"";width:80%;height:.1em;background:#fff;}
+            .fldb-icon-error::before{transform:rotate(45deg);}
+            .fldb-icon-error::after{transform:rotate(-45deg);}
+            .fldb-icon-warn::before,.fldb-icon-warn::after{position:absolute;display:block;content:"";background:#555;}
+            .fldb-icon-warn::before{width:.1em;height:.4em;transform:translateY(.4em);}
+            .fldb-icon-warn::after{width:.12em;height:.12em;border-radius:50%;transform:translateY(.7em);}
+            .fldb-icon-info::before,.fldb-icon-info::after{position:absolute;display:block;content:"";background:#fff;}
+            .fldb-icon-info::before{width:.12em;height:.12em;border-radius:50%;transform:translateY(-0.3em);}
+            .fldb-icon-info::after{width:.1em;height:.5em;transform:translateY(.1em);}
         </style>
     </head>
     <body>
-        <div id="fratily-debugbar-padding"></div>
-        <div id="fratily-debugbar">
-            <div id="fratily-debugbar-menu">
-                <div class="fratily-debugbar-scroll-wrapper-y">
-                    <ul id="fratily-debugbar-menu-ul">
-{% for collector in collectors %}
-                        <li class="fratily-debugbar-menu-ul-li" data-fratily-debugbar="{{ collector.name }}"><span>{{ collector.name }}</span></li>
-{% endfor %}
-                    </ul>
-                </div>
-            </div>
-            <div id="fratily-debugbar-header">
-                <div id="fratily-debugbar-header-menu-button">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </div>
-            </div>
-            <div id="fratily-debugbar-body">
-{% for collector in collectors %}
-                    <div class="fratily-debugbar-body-item" data-fratily-debugbar="{{ collector.name }}">
+        <div id="fldb">
+            <div id="fldb-btn"></div>
+            <div id="fldb-body">
+                <div id="fldb-body-scroll">
+                    {% for collector in collectors %}
+                    <div class="fldb-body-item" data-fldb="{{ collector.name }}">
                         {{ fratily_debugbar_panel(collector) }}
                     </div>
-{% endfor %}
+                    {% endfor %}
+                </div>
+            </div>
+            <div id="fldb-menu">
+                <div id="fldb-menu-btn"><span></span></div>
+                <div id="fldb-menu-scroll">
+                    <ul id="fldb-menu-items">
+                        {% for collector in collectors %}
+                        <li class="fldb-menu-item" data-fldb="{{ collector.name }}"><span>{{ collector.name }}</span></li>
+                        {% endfor %}
+                    </ul>
+                </div>
             </div>
         </div>
         <script>
             (function(){
-                var menuItems = document.getElementsByClassName("fratily-debugbar-menu-ul-li");
+                var menuItems = document.getElementsByClassName("fldb-menu-item");
                 var length    = menuItems.length;
                 
                 for(var i = 0; i < length; i++){
-                    if(menuItems[i].hasAttribute("data-fratily-debugbar")){
+                    if(menuItems[i].hasAttribute("data-fldb")){
                         menuItems[i].addEventListener("click", function(){
-                            var tag      = this.getAttribute("data-fratily-debugbar");
-                            var contents = document.getElementsByClassName("fratily-debugbar-body-item");
+                            var tag      = this.getAttribute("data-fldb");
+                            var contents = document.getElementsByClassName("fldb-body-item");
                             var length   = contents.length;
-                            var menu     = document.getElementById("fratily-debugbar-menu");
+                            var menu     = document.getElementById("fldb-menu");
                             
                             for(var i = 0; i < length; i++){
-                                if(contents[i].hasAttribute("data-fratily-debugbar")){
-                                    if(tag === contents[i].getAttribute("data-fratily-debugbar")){
+                                if(contents[i].hasAttribute("data-fldb")){
+                                    if(tag === contents[i].getAttribute("data-fldb")){
                                         contents[i].classList.add("select");
                                     }else{
                                         contents[i].classList.remove("select");
@@ -374,26 +124,19 @@
                     }
                 }
                 
-                document.getElementById("fratily-debugbar-header-menu-button").addEventListener("click", function(){
-                    var menu = document.getElementById("fratily-debugbar-menu");
-                    var base = document.getElementById("fratily-debugbar");
+                document.getElementById("fldb-menu-btn").addEventListener("click", function(){
+                    var menu = document.getElementById("fldb-menu");
 
-                    if(base){
-                        base.classList.add("open");
-                    }
-                    
                     if(menu){
                         menu.classList.toggle("open");
                     }
                 }, false);
                 
-                document.getElementById("fratily-debugbar-header").addEventListener("click", function(e){
-                    if(e.target.id === "fratily-debugbar-header"){
-                        var base = document.getElementById("fratily-debugbar");
+                document.getElementById("fldb-btn").addEventListener("click", function(){
+                    var base = document.getElementById("fldb");
 
-                        if(base){
-                            base.classList.toggle("open");
-                        }
+                    if(base){
+                        base.classList.toggle("open");
                     }
                 }, false);
             }());

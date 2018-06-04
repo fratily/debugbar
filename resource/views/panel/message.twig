@@ -1,7 +1,8 @@
-<ul class="fratily-debugbar-panel-message-ul">
-{% for message in messages %}
-    <li class="fratily-debugbar-panel-message-li">
-        <span class="fratily-debugbar-icon-{{message.icon}}"></span>
-        <span>{{ message.level }}: {{ message.message|nl2br }}</span></li>
-{% endfor %}
+<ul class="fldb-panel-message-list">
+    {% for message in messages %}
+    <li class="fldb-panel-message-item">
+        <span class="fldb-icon-{{message.icon}}"></span>
+        <span>{{ message.level }}: {{ message.message|nl2br }}</span>
+    </li>
+    {% endfor %}
 </ul>
