@@ -88,7 +88,7 @@
                 <div id="fldb-menu-scroll">
                     <ul id="fldb-menu-items">
                         {% for collector in collectors %}
-                        <li class="fldb-menu-item" data-fldb="{{ collector.name }}"><span>{{ collector.name }}</span></li>
+                        <li class="fldb-menu-item" data-fldb="{{ collector.name }}"><span>{{ collector.name|ucfirst }}</span></li>
                         {% endfor %}
                     </ul>
                 </div>

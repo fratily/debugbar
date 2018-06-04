@@ -228,6 +228,10 @@ class DebugBar{
                 )
             );
 
+            $this->twig->addFilter(
+                new \Twig\TwigFilter("ucfirst", "ucfirst")
+            );
+
             $this->twig->addExtension(
                 new \Twig\Extension\DebugExtension
             );
