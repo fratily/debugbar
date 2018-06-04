@@ -1,1 +1,1 @@
-# FratilyPHP Debug
+# FratilyPHP DebugBar
