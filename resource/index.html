@@ -44,8 +44,15 @@
             .fldb-panel-timeline-list{display:block;margin:0;width:100%;height:auto;border:0;padding:0;list-style:none;}
             .fldb-panel-timeline-item{position: relative;display:block;margin:0;width:100%;height:1.2em;border-bottom:1px #eee solid;padding:0;transition:all .3s ease;}
             .fldb-panel-timeline-item:hover{background:#eee;}
-            .fldb-panel-timeline-item > span:first-child{display:block;position:absolute;top:0;margin: .2em 0;height:.8em;background:#4be;}
-            .fldb-panel-timeline-item > span:last-child{display:block;position:absolute;top:0;left:0;width:20%;height:100%;font-size:.8em;}
+            .fldb-panel-timeline-item > div:first-child{position:absolute;top:0;margin: .2em 0;height:.8em;background:#4be;}
+            .fldb-panel-timeline-item > div:last-child{position:absolute;top:0;left:0;width:20%;height:100%;font-size:.8em;}
+            /* --- dump panel --- */
+            .fldb-panel-dump-list{display:block;margin:0;width:100%;height:auto;border:0;padding:0;list-style:none;}
+            .fldb-panel-dump-item{display:block;margin:0;width:100%;height:auto;border-bottom:1px #eee solid;padding:0;transition:all .3s ease;}
+            .fldb-panel-dump-item:hover{background:#eee;}
+            .fldb-panel-dump-item > div:first-child{margin:0;width:100%;height:1.2em;font-size:.6em;line-height:1.2em;color:#888;}
+            .fldb-panel-dump-item > div:last-child{box-sizing:border-box;margin:0;width:100%;height:auto;padding:.5em 2%;font-size:.8em;line-height: 1.2em;}
+            .fldb-panel-dump-item > div:last-child pre{margin:0;width:100%;height:auto;padding:0;}
             /* --- icon --- */
             .fldb-icon-error,.fldb-icon-info,.fldb-icon-warn,.fldb-icon-null{position:relative;display:flex;justify-content:center;align-items:center;}
             .fldb-icon-error,.fldb-icon-info,.fldb-icon-null{width:1em;height:1em;border-radius:50%;}
@@ -95,117 +102,49 @@
                                 <span class="fldb-icon-error"></span>
                                 <span>error: This is error<br>this is error.</span>
                             </li>
-                            <li class="fldb-panel-message-item">
-                                <span class="fldb-icon-error"></span>
-                                <span>error: This is error<br>this is error.</span>
-                            </li>
-                            <li class="fldb-panel-message-item">
-                                <span class="fldb-icon-error"></span>
-                                <span>error: This is error<br>this is error.</span>
-                            </li>
-                            <li class="fldb-panel-message-item">
-                                <span class="fldb-icon-error"></span>
-                                <span>error: This is error<br>this is error.</span>
-                            </li>
-                            <li class="fldb-panel-message-item">
-                                <span class="fldb-icon-error"></span>
-                                <span>error: This is error<br>this is error.</span>
-                            </li>
-                            <li class="fldb-panel-message-item">
-                                <span class="fldb-icon-error"></span>
-                                <span>error: This is error<br>this is error.</span>
-                            </li>
-                            <li class="fldb-panel-message-item">
-                                <span class="fldb-icon-error"></span>
-                                <span>error: This is error<br>this is error.</span>
-                            </li>
-                            <li class="fldb-panel-message-item">
-                                <span class="fldb-icon-error"></span>
-                                <span>error: This is error<br>this is error.</span>
-                            </li>
-                            <li class="fldb-panel-message-item">
-                                <span class="fldb-icon-error"></span>
-                                <span>error: This is error<br>this is error.</span>
-                            </li>
-                            <li class="fldb-panel-message-item">
-                                <span class="fldb-icon-error"></span>
-                                <span>error: This is error<br>this is error.</span>
-                            </li>
-                            <li class="fldb-panel-message-item">
-                                <span class="fldb-icon-error"></span>
-                                <span>error: This is error<br>this is error.</span>
-                            </li>
-                            <li class="fldb-panel-message-item">
-                                <span class="fldb-icon-error"></span>
-                                <span>error: This is error<br>this is error.</span>
-                            </li>
-                            <li class="fldb-panel-message-item">
-                                <span class="fldb-icon-error"></span>
-                                <span>error: This is error<br>this is error.</span>
-                            </li>
-                            <li class="fldb-panel-message-item">
-                                <span class="fldb-icon-error"></span>
-                                <span>error: This is error<br>this is error.</span>
-                            </li>
-                            <li class="fldb-panel-message-item">
-                                <span class="fldb-icon-error"></span>
-                                <span>error: This is error<br>this is error.</span>
-                            </li>
-                            <li class="fldb-panel-message-item">
-                                <span class="fldb-icon-error"></span>
-                                <span>error: This is error<br>this is error.</span>
-                            </li>
-                            <li class="fldb-panel-message-item">
-                                <span class="fldb-icon-error"></span>
-                                <span>error: This is error<br>this is error.</span>
-                            </li>
-                            <li class="fldb-panel-message-item">
-                                <span class="fldb-icon-error"></span>
-                                <span>error: This is error<br>this is error.</span>
-                            </li>
                         </ul>
                     </div>
                     <div class="fldb-body-item" data-fldb="Timeline">
                         <ul class="fldb-panel-timeline-list">
                             <li class="fldb-panel-timeline-item">
-                                <span style="left:0.01%;width:12.45%;"></span>
-                                <span>1(1000.6ms)</span>
+                                <div style="left:0.01%;width:12.45%;"></div>
+                                <div>1(1000.6ms)</div>
                             </li>
                             <li class="fldb-panel-timeline-item">
-                                <span style="left:0.01%;width:24.89%;"></span>
-                                <span>2(2000.8ms)</span>
+                                <div style="left:0.01%;width:24.89%;"></div>
+                                <div>2(2000.8ms)</div>
                             </li>
                             <li class="fldb-panel-timeline-item">
-                                <span style="left:24.9%;width:24.89%;"></span>
-                                <span>3(2000.62ms)</span>
+                                <div style="left:24.9%;width:24.89%;"></div>
+                                <div>3(2000.62ms)</div>
                             </li>
                             <li class="fldb-panel-timeline-item">
-                                <span style="left:62.24%;width:37.76%;"></span>
-                                <span>4(3035.09ms)</span>
+                                <div style="left:62.24%;width:37.76%;"></div>
+                                <div>4(3035.09ms)</div>
                             </li>
                             <li class="fldb-panel-timeline-item">
-                                <span style="left:74.69%;width:24.89%;"></span>
-                                <span>5(2001ms)</span>
+                                <div style="left:74.69%;width:24.89%;"></div>
+                                <div>5(2001ms)</div>
                             </li>
                         </ul>
                     </div>
                     <div class="fldb-body-item" data-fldb="Dump">
-                        <ul class="fldb-panel-message-ul">
-                            <li class="fldb-panel-message-li">
-                                <span class="fldb-icon-null"></span>
-                                <pre>string(6) "string"</pre>
+                        <ul class="fldb-panel-dump-list">
+                            <li class="fldb-panel-dump-item">
+                                <div><span>/var/www/htdocs/index.php 12</span></div>
+                                <div><pre>string(6) "string"</pre></div>
                             </li>
-                            <li class="fldb-panel-message-li">
-                                <span class="fldb-icon-null"></span>
-                                <pre>int(123)</pre>
+                            <li class="fldb-panel-dump-item">
+                                <div><span>/var/www/htdocs/index.php 12</span></div>
+                                <div><pre>int(123)</pre></div>
                             </li>
-                            <li class="fldb-panel-message-li">
-                                <span class="fldb-icon-null"></span>
-                                <pre>float(123.456)</pre>
+                            <li class="fldb-panel-dump-item">
+                                <div><span>/var/www/htdocs/index.php 12</span></div>
+                                <div><pre>float(123.456)</pre></div>
                             </li>
-                            <li class="fldb-panel-message-li">
-                                <span class="fldb-icon-null"></span>
-                                <pre>array(52) {
+                            <li class="fldb-panel-dump-item">
+                                <div><span>/var/www/htdocs/index.php 12</span></div>
+                                <div><pre>array(52) {
   [0]=&gt;
   string(3) "md2"
   [1]=&gt;
@@ -236,10 +175,11 @@
   string(8) "sha3-512"
 }
 </pre>
+                                </div>
                             </li>
-                            <li class="fldb-panel-message-li">
-                                <span class="fldb-icon-null"></span>
-                                <pre>NULL</pre>
+                            <li class="fldb-panel-dump-item">
+                                <div><span>/var/www/htdocs/index.php 12</span></div>
+                                <div><pre>NULL</pre></div>
                             </li>
                         </ul>
                     </div>
