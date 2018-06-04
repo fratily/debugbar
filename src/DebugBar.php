@@ -84,8 +84,8 @@ class DebugBar{
         $this->collectors   = [];
         $this->panels       = [];
 
-        foreach($collectors as $collector){
-            $this->addCollector($collector);
+        foreach($collectors as $name => $collector){
+            $this->addCollector($name, $collector);
         }
     }
 
