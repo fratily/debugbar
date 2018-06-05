@@ -77,10 +77,6 @@ class DebugBar{
      * @param   Collector\CollectorInterface[]  $collectors
      */
     public function __construct(array $collectors = []){
-        $collectors = array_unique(
-            array_filter($collectors, [self::class, "isCollector"])
-        );
-
         $this->collectors   = [];
         $this->panels       = [];
 
