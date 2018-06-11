@@ -1,8 +1,10 @@
-<ul class="fldb-panel-message-list">
+<section>
+    <ul class="fldb-blk-list fldb-blk-list_message">
     {% for message in messages %}
-    <li class="fldb-panel-message-item">
-        <span class="fldb-icon-{{message.icon}}"></span>
-        <span>{{ message.level }}: {{ message.message|nl2br }}</span>
-    </li>
+        <li>
+            <span class="fldb-icon-{{ message.icon }}"></span>
+            <span>{{ message.level }}: {{ message.message|nl2br }}</span>
+        </li>
     {% endfor %}
-</ul>
+    </ul>
+</section>

@@ -1,145 +1,155 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <title>debugbar</title>
-        <style>
-            #fldb{overflow:visible;position:fixed;bottom:0;left:0;width:100%;height:300px;border-top:1px #eee solid;background:#fff;color:#333;font-size:16px;transition:all .3s ease;transform: translateY(100%);}
-            #fldb.open{transform: translateY(0);}
-            /* --- btn --- */
-            #fldb-btn{position:absolute;top:-30px;left:0;display:flex;justify-content:center;align-items:center;width:30px;height:30px;background:#555;opacity:.8;cursor:pointer;}
-            #fldb-btn:hover{opacity:1;}
-            #fldb-btn::before,#fldb-btn::after{position:absolute;content:"";display:block;width:50%;height:13%;background-color:#fff;transition:all .3s ease;}
-            #fldb-btn::before{transform:translateX(-26%) rotate(-45deg);}
-            #fldb-btn::after{transform:translateX(26%) rotate(45deg);}
-            #fldb.open #fldb-btn::before{transform:translateX(-26%) rotate(45deg);}
-            #fldb.open #fldb-btn::after{transform:translateX(26%) rotate(-45deg);}
-            /* --- menu --- */
-            #fldb-menu{overflow:visible;position:absolute;top:0;left:0;width:200px;height:100%;background-color:#eee;transition:all .3s ease;transform: translateX(-100%);}
-            #fldb-menu.open{transform:translateX(0);}
-            /* --- menu btn --- */
-            #fldb-menu-btn{position:absolute;right:-30px;display:flex;justify-content:center;align-items:center;width:30px;height:30px;background-color:#eee;opacity:1;cursor:pointer;}
-            #fldb-menu-btn:hover{opacity:.8;}
-            #fldb-menu-btn::before,#fldb-menu-btn span,#fldb-menu-btn::after{position:absolute;content:"";display:block;width:90%;height:13%;background-color:#555;transition:all .3s ease;}
-            #fldb-menu-btn::before{transform:translateY(-200%);}
-            #fldb-menu-btn::after{transform:translateY(200%);}
-            #fldb-menu.open #fldb-menu-btn::before{transform:translateY(0) rotate(-45deg);}
-            #fldb-menu.open #fldb-menu-btn span{opacity:0;}
-            #fldb-menu.open #fldb-menu-btn::after{transform:translateY(0) rotate(45deg);}
-            /* --- menu items --- */
-            #fldb-menu-scroll{overflow:hidden;width:100%;height:100%;}
-            #fldb-menu-items{display:block;overflow-x:hidden;overflow-y:scroll;margin:0;width:calc(100% + 17px);height:100%;border:0;padding:0;list-style:none;}
-            .fldb-menu-item{display:block;margin:0;width:100%;height:30px;border-bottom:1px #aaa solid;padding:0;background:#eee;text-align:center;font-size:18px;line-height:29px;cursor:pointer;transition:all .3s ease;}
-            .fldb-menu-item:hover{background:#555;color:#fff;}
-            /* --- body --- */
-            #fldb-body{overflow:hidden;margin:10px 10px 10px 40px;width:calc(100% - 40px - 10px);height:calc(100% - 10px - 10px);}
-            #fldb-body-scroll{overflow-x:scroll;overflow-y:scroll;width:calc(100% + 17px);height:calc(100% + 17px);}
-            .fldb-body-item{display:none;margin:0 auto;width:100%;min-width:500px;height:auto;}
-            .fldb-body-item.select{display:block;}
-            /* --- message panel --- */
-            .fldb-panel-message-list{display:block;margin:0;width:100%;height:auto;border:0;padding:0;list-style:none;}
-            .fldb-panel-message-item{position: relative;display:block;margin:0;width:100%;height:auto;min-height:1.5em;border-bottom:1px #eee solid;padding:0;font-size:.8em;line-height:1.5em;transition:all .3s ease;}
-            .fldb-panel-message-item:hover{background:#eee;}
-            .fldb-panel-message-item > span:first-child{position:absolute;top:.25em;left:0;}
-            .fldb-panel-message-item > span:last-child{position:relative;top:0;left:1.5em;}
-            /* --- timeline panel --- */
-            .fldb-panel-timeline-list{display:block;margin:0;width:100%;height:auto;border:0;padding:0;list-style:none;}
-            .fldb-panel-timeline-item{position: relative;display:block;margin:0;width:100%;height:1.2em;border-bottom:1px #eee solid;padding:0;transition:all .3s ease;}
-            .fldb-panel-timeline-item:hover{background:#eee;}
-            .fldb-panel-timeline-item > div:first-child{position:absolute;top:0;margin: .2em 0;height:.8em;background:#4be;}
-            .fldb-panel-timeline-item > div:last-child{position:absolute;top:0;left:0;width:20%;height:100%;font-size:.8em;}
-            /* --- dump panel --- */
-            .fldb-panel-dump-list{display:block;margin:0;width:100%;height:auto;border:0;padding:0;list-style:none;}
-            .fldb-panel-dump-item{display:block;margin:0;width:100%;height:auto;border-bottom:1px #eee solid;padding:0;transition:all .3s ease;}
-            .fldb-panel-dump-item:hover{background:#eee;}
-            .fldb-panel-dump-item > div:first-child{margin:0;width:100%;height:1.2em;font-size:.6em;line-height:1.2em;color:#888;}
-            .fldb-panel-dump-item > div:last-child{box-sizing:border-box;margin:0;width:100%;height:auto;padding:.5em 2%;font-size:.8em;line-height: 1.2em;}
-            .fldb-panel-dump-item > div:last-child pre{margin:0;width:100%;height:auto;padding:0;}
-            /* --- icon --- */
-            .fldb-icon-error,.fldb-icon-info,.fldb-icon-warn,.fldb-icon-null{position:relative;display:flex;justify-content:center;align-items:center;}
-            .fldb-icon-error,.fldb-icon-info,.fldb-icon-null{width:1em;height:1em;border-radius:50%;}
-            .fldb-icon-error{background:#d55;}
-            .fldb-icon-info{background:#37b;}
-            .fldb-icon-warn{border-color:transparent transparent #ea5 transparent;border-style:solid;border-width:0 .5em .86em .5em;height:0;width:0;}
-            .fldb-icon-error::before,.fldb-icon-error::after{position:absolute;display:block;content:"";width:80%;height:.1em;background:#fff;}
-            .fldb-icon-error::before{transform:rotate(45deg);}
-            .fldb-icon-error::after{transform:rotate(-45deg);}
-            .fldb-icon-warn::before,.fldb-icon-warn::after{position:absolute;display:block;content:"";background:#555;}
-            .fldb-icon-warn::before{width:.1em;height:.4em;transform:translateY(.4em);}
-            .fldb-icon-warn::after{width:.12em;height:.12em;border-radius:50%;transform:translateY(.7em);}
-            .fldb-icon-info::before,.fldb-icon-info::after{position:absolute;display:block;content:"";background:#fff;}
-            .fldb-icon-info::before{width:.12em;height:.12em;border-radius:50%;transform:translateY(-0.3em);}
-            .fldb-icon-info::after{width:.1em;height:.5em;transform:translateY(.1em);}
-        </style>
-    </head>
-    <body>
-        <div id="fldb">
-            <div id="fldb-btn"></div>
-            <div id="fldb-body">
-                <div id="fldb-body-scroll">
-                    {% for collector in collectors %}
-                    <div class="fldb-body-item" data-fldb="{{ collector.name }}">
-                        {{ fratily_debugbar_panel(collector) }}
-                    </div>
-                    {% endfor %}
+
+<head>
+    <title>debugbar</title>
+    <style>
+body.fldb-open{overflow:hidden;}
+/* --- container --- */
+#fldb {overflow:visible;position:fixed;bottom:0;left:0;width:100vw;height:100vh;background:#fff;color:#333;font-size:16px;transition:transform .3s ease;transform:translateY(100%);}
+.fldb-open #fldb {transform:translateY(0);}
+/* --- btn --- */
+#fldb-btn {z-index:310;position:absolute;top:-30px;left:0;display:flex;justify-content:center;align-items:center;width:30px;height:30px;background:#555;opacity:.8;cursor:pointer;transition:transform .3s ease;}
+#fldb-btn:hover {opacity:1;}
+#fldb-btn::before,
+#fldb-btn::after {position:absolute;content:"";display:block;width:50%;height:13%;background:#fff;transition:transform .3s ease;}
+#fldb-btn::before {transform:translateX(-26%) rotate(-45deg);}
+#fldb-btn::after {transform:translateX(26%) rotate(45deg);}
+.fldb-open #fldb-btn {transform:translateY(30px);}
+.fldb-open #fldb-btn::before {transform:translateX(-26%) rotate(45deg);}
+.fldb-open #fldb-btn::after {transform:translateX(26%) rotate(-45deg);}
+/* --- header --- */
+#fldb-header{overflow:hidden;position:absolute;top:0;left:0;box-sizing:border-box;width:100%;height:30px;padding:0 0 0 35px;background:#555;color:#fff;font-size:20px;line-height:30px;}
+/* --- menu --- */
+#fldb-menu {overflow:hidden;position:absolute;top:30px;left:0;width:200px;height:calc(100% - 30px);background-color:#555;color:#fff;}
+#fldb-menu-items {display:block;overflow-x:hidden;overflow-y:scroll;margin:0;width:calc(100% + 17px);height:100%;border:0;padding:0;list-style:none;}
+.fldb-menu-item {box-sizing:border-box;display:block;margin:0;width:100%;height:30px;padding:0 0 0 35px;font-size:18px;line-height:30px;cursor:pointer;transition:all .3s ease;}
+.fldb-menu-item:hover,
+.fldb-menu-item.fldb-select{background:#fff;color:#555;}
+/* --- body --- */
+#fldb-body {overflow:auto;position:absolute;top:30px;left:0;width:calc(100% - 200px);height:calc(100% - 30px);background:#fff;transition:transform .3s ease;transform:translateX(200px);}
+@media screen and (max-width: 700px){
+#fldb-body{width:calc(100% - 30px);min-width:320px;transform:translateX(30px);}
+#fldb-menu:hover + #fldb-body {transform:translateX(200px);}
+}
+.fldb-body-panel{display:none;overflow:visible;margin:10px auto 0;width:100%;height:auto;}
+.fldb-body-panel.fldb-select{display:block;}
+.fldb-body-panel > section{box-sizing:border-box;margin:0;width:100%;height:auto;padding:0 2% 10px;}
+/* --- list --- */
+.fldb-blk-list {display:block;margin:0;width:100%;height:auto;border:0;padding:0;list-style:none;font-size:.8em;line-height:1.2em;}
+.fldb-blk-list li {position:relative;display:block;margin:0;width:100%;height:auto;min-height:1.2em;border-bottom:1px #eee solid;padding:0;transition:all .3s ease;}
+.fldb-blk-list li:last-child{border-bottom:0;}
+.fldb-blk-list li:hover {background:#eee;}
+/* --- list message --- */
+.fldb-blk-list.fldb-blk-list_message li span:first-child {position:absolute;top:.25em;left:0;}
+.fldb-blk-list.fldb-blk-list_message li span:last-child {position:relative;top:0;left:1.5em;}
+/* --- list timeline --- */
+.fldb-blk-list.fldb-blk-list_timeline li div:first-child {position:absolute;top:0;margin:.2em 0;height:.8em;background:#4be;}
+.fldb-blk-list.fldb-blk-list_timeline li div:last-child {position:absolute;top:0;left:0;width:20%;height:100%;font-size:.8em;}
+/* --- list dump --- */
+.fldb-blk-list.fldb-blk-list_dump li div:first-child {margin:0;width:100%;height:1.2em;font-size:.6em;line-height:1.2em;color:#888;}
+.fldb-blk-list.fldb-blk-list_dump li div:last-child {box-sizing:border-box;margin:0;width:100%;height:auto;padding:.5em 2%;font-size:.8em;line-height:1.2em;}
+.fldb-blk-list.fldb-blk-list_dump li div:last-child pre {margin:0;width:100%;height:auto;padding:0;}
+/* --- table --- */
+.fldb-blk-table{width:100%;border:0;border-collapse:collapse;border-spacing:0;font-size:.8em;}
+.fldb-blk-table tr{border-bottom:1px #eee solid;}
+.fldb-blk-table tr:last-child{border-bottom:0;}
+.fldb-blk-table tr > *{border-right:1px #eee solid;}
+.fldb-blk-table tr > *:last-child{border-right:0;}
+.fldb-blk-table th{font-weight:normal;}
+.fldb-blk-table thead th{background:#eee;}
+.fldb-blk-table thead th{color:#666;}
+/* --- dl --- */
+.fldb-blk-dl {margin:0;width:100%;height:auto;padding:0;font-size:.8em;line-height:1.2em;}
+.fldb-blk-dl dt{float:left;margin:0;width:30%;height:auto;padding:0;}
+.fldb-blk-dl dd {box-sizing:border-box;margin:0;width:100%;height:auto;color:#555;padding:0 0 0 30%;}
+.fldb-blk-dl dd:after {content:"";display:block;clear:both;}
+/* --- icon --- */
+.fldb-icon-error,
+.fldb-icon-info,
+.fldb-icon-warn,
+.fldb-icon-null {position:relative;display:flex;justify-content:center;align-items:center;}
+.fldb-icon-error,
+.fldb-icon-info,
+.fldb-icon-null {width:1em;height:1em;border-radius:50%;}
+.fldb-icon-error {background:#d55;}
+.fldb-icon-info {background:#37b;}
+.fldb-icon-warn {border-color:transparent transparent #ea5 transparent;border-style:solid;border-width:0 .5em .86em .5em;height:0;width:0;}
+.fldb-icon-error::before,
+.fldb-icon-error::after {position:absolute;display:block;content:"";width:80%;height:.1em;background:#fff;}
+.fldb-icon-error::before {transform:rotate(45deg);}
+.fldb-icon-error::after {transform:rotate(-45deg);}
+.fldb-icon-warn::before,
+.fldb-icon-warn::after {position:absolute;display:block;content:"";background:#555;}
+.fldb-icon-warn::before {width:.1em;height:.4em;transform:translateY(.4em);}
+.fldb-icon-warn::after {width:.12em;height:.12em;border-radius:50%;transform:translateY(.7em);}
+.fldb-icon-info::before,
+.fldb-icon-info::after {position:absolute;display:block;content:"";background:#fff;}
+.fldb-icon-info::before {width:.12em;height:.12em;border-radius:50%;transform:translateY(-0.3em);}
+.fldb-icon-info::after {width:.1em;height:.5em;transform:translateY(.1em);}
+    </style>
+</head>
+<body>
+    <div id="fldb">
+        <div id="fldb-btn"></div>
+        <div id="fldb-header">
+            <span>Fratily</span>
+        </div>
+        <div id="fldb-menu">
+            <ul id="fldb-menu-items">
+            {% for collector in collectors %}
+                <li class="fldb-menu-item{% if loop.index == 1 %}{{" fldb-select"}}{% endif %}" data-fldb="{{ collector.name }}">{{ collector.name|ucfirst }}</li>
+            {% endfor %}
+            </ul>
+        </div>
+        <div id="fldb-body">
+            <div id="fldb-body-wrapper">
+            {% for collector in collectors %}
+                <div class="fldb-body-panel{% if loop.index == 1 %}{{" fldb-select"}}{% endif %}" data-fldb="{{ collector.name }}">
+                {{ fratily_debugbar_panel(collector) }}
                 </div>
-            </div>
-            <div id="fldb-menu">
-                <div id="fldb-menu-btn"><span></span></div>
-                <div id="fldb-menu-scroll">
-                    <ul id="fldb-menu-items">
-                        {% for collector in collectors %}
-                        <li class="fldb-menu-item" data-fldb="{{ collector.name }}"><span>{{ collector.name|ucfirst }}</span></li>
-                        {% endfor %}
-                    </ul>
-                </div>
+            {% endfor %}
             </div>
         </div>
-        <script>
-            (function(){
-                var menuItems = document.getElementsByClassName("fldb-menu-item");
-                var length    = menuItems.length;
-                
-                for(var i = 0; i < length; i++){
-                    if(menuItems[i].hasAttribute("data-fldb")){
-                        menuItems[i].addEventListener("click", function(){
-                            var tag      = this.getAttribute("data-fldb");
-                            var contents = document.getElementsByClassName("fldb-body-item");
-                            var length   = contents.length;
-                            var menu     = document.getElementById("fldb-menu");
-                            
-                            for(var i = 0; i < length; i++){
-                                if(contents[i].hasAttribute("data-fldb")){
-                                    if(tag === contents[i].getAttribute("data-fldb")){
-                                        contents[i].classList.add("select");
-                                    }else{
-                                        contents[i].classList.remove("select");
-                                    }
+    </div>
+    <script>
+        (function () {
+            var openClass   = "fldb-open",
+                selectClass = "fldb-select",
+                menuItems   = document.getElementsByClassName("fldb-menu-item"),
+                menuLen     = menuItems.length,
+                panelItems  = document.getElementsByClassName("fldb-body-panel"),
+                panelLen    = panelItems.length
+            ;
+
+            for (var i = 0; i < menuLen; i++) {
+                if (menuItems[i].hasAttribute("data-fldb")) {
+                    menuItems[i].addEventListener("click", function () {
+                        var tag = this.getAttribute("data-fldb");
+
+                        for(var i = 0; i < menuLen; i++){
+                            menuItems[i].classList.remove(selectClass);
+                        }
+
+                        for (var i = 0; i < panelLen; i++) {
+                            if (panelItems[i].hasAttribute("data-fldb")) {
+                                if (tag === panelItems[i].getAttribute("data-fldb")) {
+                                    panelItems[i].classList.add(selectClass);
+                                } else {
+                                    panelItems[i].classList.remove(selectClass);
                                 }
                             }
-                            
-                            if(menu){
-                                menu.classList.remove("open");
-                            }
-                        }, false);
-                    }
+                        }
+
+                        this.classList.add(selectClass);
+                    }, false);
                 }
-                
-                document.getElementById("fldb-menu-btn").addEventListener("click", function(){
-                    var menu = document.getElementById("fldb-menu");
+            }
 
-                    if(menu){
-                        menu.classList.toggle("open");
-                    }
-                }, false);
-                
-                document.getElementById("fldb-btn").addEventListener("click", function(){
-                    var base = document.getElementById("fldb");
-
-                    if(base){
-                        base.classList.toggle("open");
-                    }
-                }, false);
-            }());
-        </script>
-    </body>
-</html>
+            document.getElementById("fldb-btn").addEventListener("click", function () {
+                if (document.body) {
+                    document.body.classList.toggle(openClass);
+                }
+            }, false);
+        }());
+    </script>
+</body>

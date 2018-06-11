@@ -1,12 +1,10 @@
-<ul class="fldb-panel-dump-list">
+<section>
+    <ul class="fldb-blk-list fldb-blk-list_dump">
     {% for var in vars %}
-    <li class="fldb-panel-dump-item">
-        <div><span>{{ var.file }} {{ var.line }}</span></div>
-        <div>
-<pre>
-{{ dump(var.val) }}
-</pre>
-        </div>
-    </li>
+        <li>
+            <div><span>{{ var.file }} line {{ var.line }}</span></div>
+            <div><pre>{{ dump(var.val) }}</pre></div>
+        </li>
     {% endfor %}
-</ul>
+    </ul>
+</section>

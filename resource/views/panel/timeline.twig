@@ -1,8 +1,10 @@
-<ul class="fldb-panel-timeline-list">
+<section>
+    <ul class="fldb-blk-list fldb-blk-list_timeline">
     {% for time in times %}
-    <li class="fldb-panel-timeline-item">
-        <div style="left:{{ time.start_p }}%;width:{{ time.runtime_p }}%;"></div>
-        <div>{{ time.name }}({{ time.runtime }}ms)</div>
-    </li>
+        <li>
+            <div style="left:{{ time.start_p }}%;width:{{ time.runtime_p }}%;"></div>
+            <div>{{ time.name }}({{ time.runtime }}ms)</div>
+        </li>
     {% endfor %}
-</ul>
+    </ul>
+</section>
