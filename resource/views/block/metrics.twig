@@ -1,0 +1,13 @@
+<div class="fldb-blk-metrics">
+    {% for metric as blk %}
+    <div>
+        <span>{{ metric.value.data }}</span>
+        {% if metric.value.unit is not null %}
+        <span>{{ metric.value.unit }}</span>
+        {% endif %}
+    </div>
+    <div>
+        <span>{{ metric.name }}</span>
+    </div>
+    {% endfor %}
+</div>

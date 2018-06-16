@@ -13,23 +13,43 @@
  */
 namespace Fratily\DebugBar\Panel;
 
+use Fratily\DebugBar\Block\DumpListBlock;
+
 class DumpPanel extends AbstractPanel{
 
     /**
-     * {@inheritdoc}
+     * @var DumpListBlock
      */
-    protected function normalize(array $data){
-        if(!is_array($data["vars"])){
-            $data["vars"]   = (array)$data["vars"];
-        }
+    private $dump;
 
-        return $data;
+    /**
+     * Constructor
+     */
+    public function __construct(){
+        $this->dump = new DumpListBlock();
+
+        $this->addBlock($this->dump);
     }
 
     /**
-     * {@inheritdoc}
+     * ダンプする値を追加する
+     *
+     * @param   mixed   $val
+     * @param   string  $file
+     * @param   int $line
+     *
+     * @return  $this
      */
-    protected function getTplName(){
-        return "panel/dump.twig";
+    public function dump($val, string $file = null, int $line = null){
+        if($file === null || $line === null){
+            $trace  = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 1);
+
+            $file   = $trace[0]["file"] ?? "unknown";
+            $line   = $trace[0]["line"] ?? 0;
+        }
+
+        $this->dump->addValue($val, $file, $line);
+
+        return $this;
     }
 }

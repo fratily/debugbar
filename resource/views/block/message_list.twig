@@ -1,0 +1,8 @@
+<ul class="fldb-blk-list fldb-blk-list_message">
+{% for msg in blk %}
+    <li>
+        <span class="fldb-icon-{{ msg.icon }}"></span>
+        <span>{{ msg.message|nl2br }}</span>
+    </li>
+{% endfor %}
+</ul>

@@ -15,7 +15,6 @@ namespace Fratily\DebugBar;
 
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
-use Twig\TwigFunction;
 
 /**
  *
@@ -23,14 +22,9 @@ use Twig\TwigFunction;
 class DebugBar{
 
     /**
-     * @var Collector\CollectorInterface[]
-     */
-    private $collectors;
-
-    /**
      * @var Panel\PanelInterface[]
      */
-    private $panels;
+    private $panels = [];
 
     /**
      * @var Environment
@@ -38,108 +32,22 @@ class DebugBar{
     private $twig;
 
     /**
-     * 値がコレクターインスタンスか確認する
-     *
-     * @param   mixed   $val
-     *
-     * @return  bool
-     */
-    protected static function isCollector($val){
-        return $val instanceof Collector\CollectorInterface;
-    }
-
-    /**
-     * 値がパネルクラスか確認する
-     *
-     * @param   string  $class
-     *
-     * @return  bool
-     */
-    protected static function isPanelClass(string $class){
-        static $result  = [];
-
-        if(!array_key_exists($class, $result)){
-            $result[$class] = false;
-
-            if(class_exists($class)
-                && in_array(Panel\PanelInterface::class, class_implements($class))
-            ){
-                $result[$class] = true;
-            }
-        }
-
-        return $result[$class];
-    }
-
-    /**
      * Constructor
      *
-     * @param   Collector\CollectorInterface[]  $collectors
+     * @param   Panel\PanelInterface[]  $panels
      */
-    public function __construct(array $collectors = []){
-        $this->collectors   = [];
-        $this->panels       = [];
-
-        foreach($collectors as $name => $collector){
-            $this->addCollector($name, $collector);
+    public function __construct(array $panels = []){
+        foreach($panels as $panel){
+            $this->addPanel($panel);
         }
     }
 
-    /**
-     * コレクターを取得する
-     *
-     * @param   string  $name
-     *
-     * @return  Collector\CollectorInterface|null
-     */
-    public function getCollector(string $name){
-        return $this->collectors[$name] ?? null;
+    public function getPanels(){
+        return $this->panels;
     }
 
-    /**
-     * コレクターリストを取得する
-     *
-     * @return  CollectorInterface[]
-     */
-    public function getCollectors(){
-        return $this->collectors;
-    }
-
-    /**
-     * 指定した名前のコレクターが登録されているか確認する
-     *
-     * @param   string  $name
-     *
-     * @return  bool
-     */
-    public function hasCollector(string $name){
-        return array_key_exists($name, $this->collectors);
-    }
-
-    /**
-     * コレクターを登録する
-     *
-     * @param   Collector\CollectorInterface    $collector
-     *
-     * @return  $this
-     *
-     * @throws  \LogicException
-     * @throws  \InvalidArgumentException
-     */
-    public function addCollector(string $name, Collector\CollectorInterface $collector){
-        if($name === ""){
-            throw new \LogicException;  // 名前が空のコレクターは実装してはならない
-        }
-
-        if($this->hasCollector($name)){
-            throw new \InvalidArgumentException();  // 同名のコレクターは使用できない
-        }
-
-        $collector->setName($name);
-
-        $this->collectors[$name]    = $collector;
-
-        return $this;
+    public function addPanel(Panel\PanelInterface $panel){
+        $this->panels[] = $panel;
     }
 
     /**
@@ -180,7 +88,7 @@ class DebugBar{
         $this->initTwig();
 
         return $this->twig->render("debugbar.twig", [
-            "collectors"    => $this->collectors
+            "panels"    => $this->panels
         ]);
     }
 
@@ -217,51 +125,9 @@ class DebugBar{
                 ]
             );
 
-            $this->twig->addFunction(
-                new TwigFunction(
-                    "fratily_debugbar_panel",
-                    [$this, "callbackRenderCollector"]
-                )
-            );
-
-            $this->twig->addFilter(
-                new \Twig\TwigFilter("ucfirst", "ucfirst")
-            );
-
             $this->twig->addExtension(
                 new \Twig\Extension\DebugExtension
             );
         }
-    }
-
-    /**
-     * コレクターを描画するためのメソッド
-     *
-     * Twigテンプレートから拡張関数として呼ばれる。
-     * その他の場所から呼ぶと文字列が出力されるので注意。
-     *
-     * @param   Collector\CollectorInterface    $collector
-     *
-     * @return  void
-     */
-    public function callbackRenderCollector(Collector\CollectorInterface $collector){
-        $this->initTwig();
-
-        if(!array_key_exists($collector->getPanelClass(), $this->panels)){
-            if(!class_exists($collector->getPanelClass())
-                || !in_array(
-                    Panel\PanelInterface::class,
-                    class_implements($collector->getPanelClass())
-                )
-            ){
-                throw new \LogicException;  // パネルクラス名が不正
-            }
-
-            $panelName  = $collector->getPanelClass();
-
-            $this->panels[$panelName]   = new $panelName($this->twig);
-        }
-
-        echo $this->panels[$panelName]->render($collector);
     }
 }

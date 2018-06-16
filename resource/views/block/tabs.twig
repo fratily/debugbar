@@ -1,0 +1,17 @@
+{% set id = blk.id %}
+<div class="fldb-blk-tabs">
+    {% for tab in blk %}
+    <input name="fldb-blk-tabs-{{ id }}" id="fldb-blk-tabs-{{ id }}-{{ tab.name }}" type="radio" checked>
+    <label for="fldb-blk-tabs-{{ id }}-{{ tab.name }}">Metrics</label>
+    {% endfor %}
+    {% for tab in blk %}
+    <div>
+        <section>
+            {% if tab.title is not null %}
+            <h2>{{ tab.title }}</h2>
+            {% endif %}
+            {% include tab.template with {'blk': tab} only %}
+        </section>
+    </div>
+    {% endfor %}
+</div>

@@ -13,6 +13,7 @@
  */
 namespace Fratily\DebugBar\Panel;
 
+use Fratily\DebugBar\Block\MessageListBlock;
 use Psr\Log\LogLevel;
 
 class MessagePanel extends AbstractPanel{
@@ -29,68 +30,33 @@ class MessagePanel extends AbstractPanel{
     ];
 
     const ICON  = [
-        LogLevel::EMERGENCY => "error",
-        LogLevel::ALERT     => "error",
-        LogLevel::CRITICAL  => "error",
-        LogLevel::ERROR     => "error",
-        LogLevel::WARNING   => "warn",
-        LogLevel::NOTICE    => "warn",
-        LogLevel::INFO      => "info",
-        LogLevel::DEBUG     => "null",
+        LogLevel::EMERGENCY => MessageListBlock::ICON_ERR,
+        LogLevel::ALERT     => MessageListBlock::ICON_ERR,
+        LogLevel::CRITICAL  => MessageListBlock::ICON_ERR,
+        LogLevel::ERROR     => MessageListBlock::ICON_ERR,
+        LogLevel::WARNING   => MessageListBlock::ICON_WARN,
+        LogLevel::NOTICE    => MessageListBlock::ICON_WARN,
+        LogLevel::INFO      => MessageListBlock::ICON_INFO,
+        LogLevel::DEBUG     => MessageListBlock::ICON_NULL,
     ];
 
     /**
-     * {@inheritdoc}
+     * @var MessageListBlock
      */
-    protected function normalize(array $data){
-        $messages   = [];
-
-        foreach($data["messages"] as $message){
-            if(!is_array($message)){
-                $message    = [
-                    "level"     => LogLevel::DEBUG,
-                    "message"   => $message,
-                ];
-            }
-
-            $level      = self::normalizeLevel($message["level"] ?? null);
-            $icon       = self::ICON[$level];
-            $message    = self::normalizeMessage($message["message"] ?? null);
-
-            $messages[] = [
-                "level"     => $level,
-                "icon"      => $icon,
-                "message"   => $message,
-            ];
-        }
-
-        $data["messages"]   = $messages;
-
-        return $data;
-    }
-
-    protected function normalizeLevel($level){
-        if(!is_string($level) || !array_key_exists($level, self::LEVEL)){
-            $level  = LogLevel::DEBUG;
-        }
-
-        return $level;
-    }
-
-    protected function normalizeMessage($message){
-        if(!is_scalar($message) && !(is_object($message) && method_exists($message, "__toString"))){
-            $message    = "This message can not be displayed.";
-        }else{
-            $message    = (string)$message;
-        }
-
-        return $message;
-    }
+    private $message;
 
     /**
-     * {@inheritdoc}
+     * Constructor
      */
-    protected function getTplName(){
-        return "panel/message.twig";
+    public function __construct(){
+        $this->message  = new MessageListBlock();
+
+        $this->addBlock($this->message);
+    }
+
+    public function addMessage(string $message, $level = LogLevel::DEBUG){
+        $this->message->addMessage($message, self::ICON[$level] ?? MessageListBlock::ICON_NULL);
+
+        return $this;
     }
 }

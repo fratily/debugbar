@@ -4,6 +4,16 @@
         body.fldb-open{
             overflow: hidden;
         }
+        .fldb-scroll-x{
+            display: block;
+            overflow-x: auto;
+            overflow-y: visible;
+            margin: 0;
+            width: 100%;
+            height: auto;
+            border: none;
+            padding: 0;
+        }
         /* --- container --- */
         #fldb{
             overflow: visible;
@@ -15,6 +25,7 @@
             background: #fff;
             color: #333;
             font-size: 16px;
+            line-height: 1.5em;
             transition: transform .3s ease;
             transform: translateY(100%);
         }
@@ -167,8 +178,6 @@
             border: 0;
             padding: 0;
             list-style: none;
-            font-size: .8em;
-            line-height: 1.2em;
         }
         .fldb-blk-list li{
             position: relative;
@@ -176,41 +185,44 @@
             margin: 0;
             width: 100%;
             height: auto;
-            min-height: 1.2em;
-            border-bottom: 1px #eee solid;
-            padding: 0;
+            min-height: 1.5em;
+            border-width: 1px 1px 0;
+            border-style: solid;
+            border-color: #ddd;
+            padding: 5px;
+            box-sizing: content-box;
+            background: #fff;
+            font-size: 1em;
+            line-height: 1.5em;
             transition: all .3s ease;
         }
         .fldb-blk-list li:last-child{
-            border-bottom: 0;
-        }
-        .fldb-blk-list li:hover{
-            background: #eee;
+            border-bottom: 1px #ddd solid;
         }
         /* --- list message --- */
         .fldb-blk-list.fldb-blk-list_message li span:first-child{
             position: absolute;
             top: .25em;
-            left:0;
+            left: .5em;
         }
         .fldb-blk-list.fldb-blk-list_message li span:last-child{
             position: relative;
             top: 0;
-            left: 1.5em;
+            left: 2em;
         }
         /* --- list timeline --- */
         .fldb-blk-list.fldb-blk-list_timeline li div:first-child{
             position: absolute;
-            top: 0;
-            margin: .2em 0;
-            height: .8em;
+            top: 10%;
+            margin: 0;
+            height: 80%;
             background: #4be;
         }
         .fldb-blk-list.fldb-blk-list_timeline li div:last-child{
             position: absolute;
             top: 0;
             left: 0;
-            width: 20%;
+            width: 100%;
             height: 100%;
             font-size: .8em;
         }
@@ -258,7 +270,7 @@
             display: block;
             margin: 0 1em 1em 0;
             width: auto;
-            height: 55px;
+            height: 70px;
             padding: 0;
             box-sizing: content-box;
             background: #fff;    
@@ -276,8 +288,8 @@
             white-space: nowrap;
         }
         .fldb-blk-metrics li > div:first-child{
-            height: 35px;
-            padding: 5px 10px 0;
+            height: 50px;
+            padding: 10px 10px;
             text-align: center;
             font-size: 26px;
             line-height: 30px;
@@ -294,34 +306,96 @@
             font-size: 12px;
             line-height: 20px;
         }
-        /* --- table --- */
-        .fldb-blk-table{
+        /* --- タブ切り替え --- */
+        .fldb-blk-tabs{
+            position: relative;
             width: 100%;
-            border: 0;
-            border-collapse: collapse;
-            border-spacing: 0;
-            font-size: .8em;
+            height: auto;
+            padding: 0 0 30px;
         }
-        .fldb-blk-table tr{
-            border-bottom: 1px #eee solid;
+        .fldb-blk-tabs > input{
+            display: none;
         }
-        .fldb-blk-table tr:last-child{
-            border-bottom:0;
+        .fldb-blk-tabs > label{
+            float: left;
+            display: block;
+            width: 100%;
+            box-shadow: 0px 0px 1px #ddd;
+            background: #fff;
+            text-align: center;
+            transition: background .2s ease;
         }
-        .fldb-blk-table tr > *{
-            border-right: 1px #eee solid;
-        }
-        .fldb-blk-table tr > *:last-child{
-            border-right: 0;
-        }
-        .fldb-blk-table th{
-            font-weight: normal;
-        }
-        .fldb-blk-table thead th{
+        .fldb-blk-tabs > label:nth-last-of-type(2),.fldb-blk-tabs > label:nth-last-of-type(2) ~ label{width: calc(100% / 2);}
+        .fldb-blk-tabs > label:nth-last-of-type(3),.fldb-blk-tabs > label:nth-last-of-type(3) ~ label{width: calc(100% / 3);}
+        .fldb-blk-tabs > label:nth-last-of-type(4),.fldb-blk-tabs > label:nth-last-of-type(4) ~ label{width: calc(100% / 4);}
+        .fldb-blk-tabs > label:nth-last-of-type(5),.fldb-blk-tabs > label:nth-last-of-type(5) ~ label{width: calc(100% / 5);}
+        .fldb-blk-tabs > label:nth-last-of-type(6),.fldb-blk-tabs > label:nth-last-of-type(6) ~ label{width: calc(100% / 6);}
+        .fldb-blk-tabs > label:nth-last-of-type(7),.fldb-blk-tabs > label:nth-last-of-type(7) ~ label{width: calc(100% / 7);}
+        .fldb-blk-tabs > label:nth-last-of-type(8),.fldb-blk-tabs > label:nth-last-of-type(8) ~ label{width: calc(100% / 8);}
+        .fldb-blk-tabs > input:not(:checked) + label:hover{
             background: #eee;
         }
-        .fldb-blk-table thead th{
-            color: #666;
+        .fldb-blk-tabs > div{
+            position: relative;
+            top: 30px;
+            left: 0;
+            display: none;
+            width: 100%;
+            height: auto;
+        }
+        .fldb-blk-tabs > input:checked + label{
+            background: #666;
+            color: #fff;
+        }
+        .fldb-blk-tabs > input:nth-of-type(1):checked ~ div:nth-of-type(1),
+        .fldb-blk-tabs > input:nth-of-type(2):checked ~ div:nth-of-type(2),
+        .fldb-blk-tabs > input:nth-of-type(3):checked ~ div:nth-of-type(3),
+        .fldb-blk-tabs > input:nth-of-type(4):checked ~ div:nth-of-type(4),
+        .fldb-blk-tabs > input:nth-of-type(5):checked ~ div:nth-of-type(5),
+        .fldb-blk-tabs > input:nth-of-type(6):checked ~ div:nth-of-type(6),
+        .fldb-blk-tabs > input:nth-of-type(7):checked ~ div:nth-of-type(7),
+        .fldb-blk-tabs > input:nth-of-type(8):checked ~ div:nth-of-type(8){
+            display: block;
+        }
+
+        /* --- table --- */
+        .fldb-blk-tabsle{
+            width: 100%;
+            height: auto;
+            border: 1px #ddd solid;
+            border-collapse: collapse;
+            border-spacing: 0;
+            box-sizing: border-box;
+            font-size: 1em;
+            white-space: nowrap;
+        }
+        .fldb-blk-tabsle thead{
+            min-width: 100%;
+            background: #ddd;
+            text-align: left;
+        }
+        .fldb-blk-tabsle tbody{
+            min-width: 100%;
+            background: #fff;
+            font-size: .8em;
+        }
+        .fldb-blk-tabsle tr{
+            border-width: 0 0 1px;
+            border-color: #ddd;
+            border-style: solid;
+        }
+        .fldb-blk-tabsle tr:last-child{
+            border-bottom: 0;
+        }
+        .fldb-blk-tabsle tr > *{
+            border: none;
+        }
+        .fldb-blk-tabsle th{
+            font-weight: bold;
+        }
+        .fldb-blk-tabsle th,
+        .fldb-blk-tabsle td{
+            padding: 5px 10px;
         }
         /* --- dl --- */
         .fldb-blk-dl{
@@ -329,8 +403,6 @@
             width: 100%;
             height: auto;
             padding: 0;
-            font-size: .8em;
-            line-height: 1.2em;
         }
         .fldb-blk-dl dt{
             float: left;
@@ -356,39 +428,78 @@
         .fldb-icon-error,
         .fldb-icon-info,
         .fldb-icon-warn,
-        .fldb-icon-null{
+        .fldb-icon-null,
+        .fldb-icon-check,
+        .fldb-icon-cross{
             position: relative;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            display: inline-block;
+            width: 1.5em;
+            height: 1.5em;
+            vertical-align: top;
         }
-        .fldb-icon-error,
-        .fldb-icon-info,
-        .fldb-icon-null{
-            width: 1em;
-            height: 1em;
-            border-radius: 50%;
-        }
-        .fldb-icon-error{
-            background: #d55;
-        }
+        /* --- icon info --- */
         .fldb-icon-info{
             background:#37b;
         }
+        .fldb-icon-info::before,
+        .fldb-icon-info::after{
+            left: 42.5%;
+            position: absolute;
+            display: block;
+            content: "";
+            background: #fff;
+        }
+        .fldb-icon-info::before{
+            top: 10%;
+            width: 15%;
+            height: 15%;
+            border-radius: 50%;
+        }
+        .fldb-icon-info::after{
+            top: 35%;
+            width: 15%;
+            height: 55%;
+        }
+        /* --- icon warn --- */
         .fldb-icon-warn{
             border-color: transparent transparent #ea5 transparent;
             border-style: solid;
-            border-width: 0 .5em .86em .5em;
-            height: 0;
-            width: 0;
+            border-width: .2em .75em 1.3em .75em;
+            box-sizing: border-box;
+        }
+        .fldb-icon-warn::before,
+        .fldb-icon-warn::after{
+            position: absolute;
+            top: 0;
+            left: 0;
+            display: block;
+            content: "";
+            background: #555;
+        }
+        .fldb-icon-warn::before{
+            width: .2em;
+            height: .6em;
+            transform: translateX(-.1em) translateY(.3em);
+        }
+        .fldb-icon-warn::after{
+            width: .2em;
+            height: .2em;
+            transform: translateX(-.1em) translateY(1em);
+        }
+        /* --- icon error --- */
+        .fldb-icon-error{
+            background: #d55;
+            border-radius: 50%;
         }
         .fldb-icon-error::before,
         .fldb-icon-error::after{
             position: absolute;
+            top: 42.5%;
+            left: 10%;
             display: block;
             content: "";
             width: 80%;
-            height: .1em;
+            height: 15%;
             background: #fff;
         }
         .fldb-icon-error::before{
@@ -397,41 +508,38 @@
         .fldb-icon-error::after{
             transform: rotate(-45deg);
         }
-        .fldb-icon-warn::before,
-        .fldb-icon-warn::after{
+        /* --- icon cross --- */
+        .fldb-icon-cross::before,
+        .fldb-icon-cross::after{
             position: absolute;
+            top: 40%;
+            left: 5%;
             display: block;
             content: "";
-            background: #555;
+            width: 90%;
+            height: 20%;
+            background: #d55;
         }
-        .fldb-icon-warn::before{
-            width: .1em;
-            height: .4em;
-            transform: translateY(.4em);
+        .fldb-icon-cross::before{
+            transform: rotate(45deg);
         }
-        .fldb-icon-warn::after{
-            width: .12em;
-            height: .12em;
-            border-radius: 50%;
-            transform: translateY(.7em);
+        .fldb-icon-cross::after{
+            transform: rotate(-45deg);
         }
-        .fldb-icon-info::before,
-        .fldb-icon-info::after{
+        /* --- icon check --- */
+        .fldb-icon-check::before{
             position: absolute;
+            top: calc(50% - 15% - .15em);
+            left: calc(50% - 25% - .15em);
             display: block;
             content: "";
-            background: #fff;
-        }
-        .fldb-icon-info::before{
-            width: .12em;
-            height: .12em;
-            border-radius: 50%;
-            transform: translateY(-0.3em);
-        }
-        .fldb-icon-info::after{
-            width: .1em;
-            height: .5em;
-            transform: translateY(.1em);
+            width: 70%;
+            height: 40%;
+            border-width:  0 0 .3em .3em;
+            border-color: #5d5;
+            border-style: solid;
+            box-sizing: border-box;
+            transform: rotate(-50deg);
         }
     </style>
 </head>
@@ -468,68 +576,153 @@
             <div id="fldb-body-wrapper">
                 <div class="fldb-body-panel" data-fldb="Request/Response">
                     <section>
-                        <h2>Metrics</h2>
-                        <ul class="fldb-blk-metrics">
-                            <li>
-                                <div>
-                                    <span>7.2.4</span>
-                                </div>
-                                <div>
-                                    <span>PHP version</span>
-                                </div>
-                            </li>
-                            <li>
-                                <div>
-                                    <span>1611</span>
-                                    <span>ms</span>
-                                </div>
-                                <div>
-                                    <span>Total execution time</span>
-                                </div>
-                            </li>
-                            <li>
-                                <div>
-                                    <span>2.00</span>
-                                    <span>MB</span>
-                                </div>
-                                <div>
-                                    <span>Peak memory usage</span>
-                                </div>
-                            </li>
-                        </ul>
-                    </section>
-                    <section>
-                        <h2>Request/Response Header</h2>
-                        <table class="fldb-blk-table">
-                            <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Value</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr><th>accept</th><td>text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8</td></tr>
-                                <tr><th>accept-encoding</th><td>gzip, deflate, br</td></tr>
-                                <tr><th>accept-language</th><td>ja,en-US;q=0.9,en;q=0.8</td></tr>
-                                <tr><th>cache-control</th><td>max-age=0</td></tr>
-                                <tr><th>cookie</th><td>OGPC=19005936-2:; SID=IgbqCXvaMF8piHuKwq0hEyiYbu3fKgrSoho87y7SUq7iJC83zLLKyCoyNhVzzu8Ob7dlFQ.; HSID=AndiClFsID0FC-wje; SSID=AsTfnuQ7gtXOjObqN; APISID=3mNVnzyoeS_56w-Y/AXj3iIbPQ5zNWF6-V; SAPISID=s_9G5hSO8Wm2p9Tq/AexntjD9dM14T6SSM; NID=132=YtQ_EKF48AjzdQw5aZGqUi5wAzaRE7MSpnw_qCQLWj1BNIHUm-eRyb1Fc-N4_DtT64PFoiH7ih3c4cXY9ePOfB-iyN-3A_h1eXPlWsK6suR3rrTWXSMwdclmnw8_QHfyllJ11v-2KXTw9tok4ZEgHRo3rW6CkVo5M8Y_IpxL8zv9LuJKAfbNKf_2fEwXIiqXVB5lIETmYLoyWv9icUimXKx7cNoeS1_gKOC7kdPdZ-qOille; 1P_JAR=2018-6-11-2</td></tr>
-                                <tr><th>upgrade-insecure-requests</th><td>1</td></tr>
-                                <tr><th>user-agent</th><td>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.181 Safari/537.36</td></tr>
-                                <tr><th>x-client-data</th><td>CI22yQEIo7bJAQjEtskBCKmdygEI153KAQijn8oBCKijygEIo6TKARiXmMoB</td></tr>
-                                <tr><th>alt-svc</th><td>quic=":443"; ma=2592000; v="43,42,41,39,35"</td></tr>
-                                <tr><th>cache-control</th><td>private, max-age=0</td></tr>
-                                <tr><th>content-encoding</th><td>br</td></tr>
-                                <tr><th>content-type</th><td>text/html; charset=UTF-8</td></tr>
-                                <tr><th>date</th><td>Mon, 11 Jun 2018 02:38:50 GMT</td></tr>
-                                <tr><th>expires</th><td>-1</td></tr>
-                                <tr><th>server</th><td>gws</td></tr>
-                                <tr><th>set-cookie</th><td>1P_JAR=2018-06-11-02; expires=Wed, 11-Jul-2018 02:38:50 GMT; path=/; domain=.google.co.jp</td></tr>
-                                <tr><th>status</th><td>200</td></tr>
-                                <tr><th>strict-transport-security</th><td>max-age=3600</td></tr>
-                                <tr><th>x-frame-options</th><td>SAMEORIGIN</td></tr>
-                                <tr><th>x-xss-protection</th><td>1; mode=block</td></tr>
-                            </tbody>
-                        </table>
+                        <h2>tabs</h2>
+                        <div class="fldb-blk-tabs">
+                            <input name="fldb-blk-tabs-xxxxxxxx" id="fldb-blk-tabs-xxxxxxxx-Metrics" type="radio" checked>
+                            <label for="fldb-blk-tabs-xxxxxxxx-Metrics">Metrics</label>
+                            <input name="fldb-blk-tabs-xxxxxxxx" id="fldb-blk-tabs-xxxxxxxx-Table" type="radio">
+                            <label for="fldb-blk-tabs-xxxxxxxx-Table">Table</label>
+                            <input name="fldb-blk-tabs-xxxxxxxx" id="fldb-blk-tabs-xxxxxxxx-Header" type="radio">
+                            <label for="fldb-blk-tabs-xxxxxxxx-Header">Header</label>
+                            <input name="fldb-blk-tabs-xxxxxxxx" id="fldb-blk-tabs-xxxxxxxx-Dl" type="radio">
+                            <label for="fldb-blk-tabs-xxxxxxxx-Dl">Dl</label>
+                            <div>
+                                <section>
+                                    <h2>Metrics</h2>
+                                    <ul class="fldb-blk-metrics">
+                                        <li>
+                                            <div>
+                                                <span>7.2.4</span>
+                                            </div>
+                                            <div>
+                                                <span>PHP version</span>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div>
+                                                <span class="fldb-icon-cross"></span>
+                                            </div>
+                                            <div>
+                                                <span>Cross mark</span>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div>
+                                                <span class="fldb-icon-check"></span>
+                                            </div>
+                                            <div>
+                                                <span>Check mark</span>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div>
+                                                <span>1611</span>
+                                                <span>ms</span>
+                                            </div>
+                                            <div>
+                                                <span>Total execution time</span>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div>
+                                                <span>2.00</span>
+                                                <span>MB</span>
+                                            </div>
+                                            <div>
+                                                <span>Peak memory usage</span>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </section>
+                            </div>
+                            <div>
+                                <section>
+                                    <h2>Table</h2>
+                                    <div class="fldb-scroll-x">
+                                        <table class="fldb-blk-tabsle">
+                                            <thead>
+                                                <tr>
+                                                    <th>Level</th>
+                                                    <th>Channel</th>
+                                                    <th>Message</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>DEBUG</td>
+                                                    <td>route</td>
+                                                    <td>this is message.</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>DEBUG</td>
+                                                    <td>route</td>
+                                                    <td>this is message.</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>DEBUG</td>
+                                                    <td>route</td>
+                                                    <td>this is message.</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </section>
+                            </div>
+                            <div>
+                                <section>
+                                    <h2>Header</h2>
+                                    <div class="fldb-scroll-x">
+                                        <table class="fldb-blk-tabsle">
+                                            <thead>
+                                                <tr>
+                                                    <th>Name</th>
+                                                    <th>Value</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr><th>accept</th><td>text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8</td></tr>
+                                                <tr><th>accept-encoding</th><td>gzip, deflate, br</td></tr>
+                                                <tr><th>accept-language</th><td>ja,en-US;q=0.9,en;q=0.8</td></tr>
+                                                <tr><th>cache-control</th><td>max-age=0</td></tr>
+                                                <tr><th>cookie</th><td>OGPC=19005936-2:; SID=IgbqCXvaMF8piHuKwq0hEyiYbu3fKgrSoho87y7SUq7iJC83zLLKyCoyNhVzzu8Ob7dlFQ.; <br>HSID=AndiClFsID0FC-wje; SSID=AsTfnuQ7gtXOjObqN; APISID=3mNVnzyoeS_56w-Y/AXj3iIbPQ5zNWF6-V; SAPISID=s_9G5hSO8Wm2p9Tq/AexntjD9dM14T6SSM; NID=132=YtQ_EKF48AjzdQw5aZGqUi5wAzaRE7MSpnw_qCQLWj1BNIHUm-eRyb1Fc-N4_DtT64PFoiH7ih3c4cXY9ePOfB-iyN-3A_h1eXPlWsK6suR3rrTWXSMwdclmnw8_QHfyllJ11v-2KXTw9tok4ZEgHRo3rW6CkVo5M8Y_IpxL8zv9LuJKAfbNKf_2fEwXIiqXVB5lIETmYLoyWv9icUimXKx7cNoeS1_gKOC7kdPdZ-qOille; 1P_JAR=2018-6-11-2</td></tr>
+                                                <tr><th>upgrade-insecure-requests</th><td>1</td></tr>
+                                                <tr><th>user-agent</th><td>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.181 Safari/537.36</td></tr>
+                                                <tr><th>x-client-data</th><td>CI22yQEIo7bJAQjEtskBCKmdygEI153KAQijn8oBCKijygEIo6TKARiXmMoB</td></tr>
+                                                <tr><th>alt-svc</th><td>quic=":443"; ma=2592000; v="43,42,41,39,35"</td></tr>
+                                                <tr><th>cache-control</th><td>private, max-age=0</td></tr>
+                                                <tr><th>content-encoding</th><td>br</td></tr>
+                                                <tr><th>content-type</th><td>text/html; charset=UTF-8</td></tr>
+                                                <tr><th>date</th><td>Mon, 11 Jun 2018 02:38:50 GMT</td></tr>
+                                                <tr><th>expires</th><td>-1</td></tr>
+                                                <tr><th>server</th><td>gws</td></tr>
+                                                <tr><th>set-cookie</th><td>1P_JAR=2018-06-11-02; expires=Wed, 11-Jul-2018 02:38:50 GMT; path=/; domain=.google.co.jp</td></tr>
+                                                <tr><th>status</th><td>200</td></tr>
+                                                <tr><th>strict-transport-security</th><td>max-age=3600</td></tr>
+                                                <tr><th>x-frame-options</th><td>SAMEORIGIN</td></tr>
+                                                <tr><th>x-xss-protection</th><td>1; mode=block</td></tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </section>
+                            </div>
+                            <div>
+                                <section>
+                                    <h2>dl</h2>
+                                    <dl class="fldb-blk-dl">
+                                        <dt>name</dt>
+                                        <dd>value</dd>
+            
+                                        <dt>name<br>name</dt>
+                                        <dd>value</dd>
+            
+                                        <dt>name</dt>
+                                        <dd>value</dd>
+                                        <dd>value</dd>
+                                        <dd>value</dd>
+                                    </dl>
+                                </section>
+                            </div>
+                        </div>
                     </section>
                 </div>
                 <div class="fldb-body-panel" data-fldb="Message">

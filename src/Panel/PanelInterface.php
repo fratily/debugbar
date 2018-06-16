@@ -13,9 +13,23 @@
  */
 namespace Fratily\DebugBar\Panel;
 
-use Fratily\DebugBar\Collector\CollectorInterface;
+interface PanelInterface extends \IteratorAggregate{
 
-interface PanelInterface{
+    /**
+     * パネルの名前を取得する
+     *
+     * @return  string
+     */
+    public function getName();
 
-    public function render(CollectorInterface $collector);
+    /**
+     * パネルの名前を設定する
+     *
+     * @param   string  $name
+     *
+     * @return  void
+     *
+     * @throws  \InvalidArgumentException
+     */
+    public function setName(string $name);
 }

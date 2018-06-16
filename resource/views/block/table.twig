@@ -1,0 +1,20 @@
+<table class="fldb-blk-table">
+    {%  if blk.header is not null %}
+    <thead>
+        <tr>
+        {% for column in blk.header %}
+            <th>{{ column|nl2br }}</th>
+        {% endfor %}
+        </tr>
+    </thead>
+    {% endif %}
+    <tbody>
+    {% for row in blk %}
+        <tr>
+        {% for column in row %}
+            <td>{{ column|nl2br }}</td>
+        {% endfor %}
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

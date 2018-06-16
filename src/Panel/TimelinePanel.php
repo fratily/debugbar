@@ -13,23 +13,85 @@
  */
 namespace Fratily\DebugBar\Panel;
 
+use Fratily\DebugBar\Block\TimelineBlock;
+
 class TimelinePanel extends AbstractPanel{
 
     /**
-     * {@inheritdoc}
+     * @var TimelineBlock
      */
-    protected function normalize(array $data){
-        if(!isset($data["times"]) || !is_array($data["times"])){
-            $data["times"]   = [];
-        }
+    private $timeline;
 
-        return $data;
+    /**
+     * @var float
+     */
+    private $start;
+
+    /**
+     * @var float[]
+     */
+    private $lineStart;
+
+    /**
+     * Constructor
+     */
+    public function __construct(float $start){
+        $this->timeline     = new TimelineBlock();
+        $this->start        = $start;
+        $this->lineStart    = [];
+
+        $this->timeline->setTitle("TimeLine");
+
+        $this->addBlock($this->timeline);
+
     }
 
     /**
-     * {@inheritdoc}
+     * タイムラインの終了時間を設定する
+     *
+     * マイクロ秒精度UNIXタイムスタンプで設定する
+     *
+     * @param   float   $time
+     *
+     * @return  void
      */
-    protected function getTplName(){
-        return "panel/timeline.twig";
+    public function setEndTime(float $time){
+        if($time <= $this->start){
+            throw new \LogicException;
+        }
+
+        $this->timeline->setMeasurementTime($time - $this->start);
+    }
+
+    /**
+     * 指定名のタイムラインを開始する
+     *
+     * @param   string  $name
+     *
+     * @return  void
+     */
+    public function start(string $name){
+        $this->lineStart[$name] = microtime(true);
+    }
+
+    /**
+     * 指定名のタイムラインを終了する
+     *
+     * @param   string  $name
+     *
+     * @return  void
+     */
+    public function end(string $name){
+        $time   = microtime(true);
+
+        if(!array_key_exists($name, $this->lineStart)){
+            throw new \LogicException;
+        }
+
+        $this->timeline->addLine(
+            $name,
+            $this->lineStart[$name] - $this->start,
+            $time - $this->lineStart[$name]
+        );
     }
 }

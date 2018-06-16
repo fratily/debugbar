@@ -1,0 +1,12 @@
+<ul class="fldb-blk-list fldb-blk-list_dump">
+{% for dump in blk %}
+    <li>
+        <div>
+            <span>{{ dump.file }} line {{ dump.line }}</span>
+        </div>
+        <div>
+            <pre>{{ dump(dump.val) }}</pre>
+        </div>
+    </li>
+{% endfor %}
+</ul>

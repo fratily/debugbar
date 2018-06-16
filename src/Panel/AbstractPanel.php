@@ -13,51 +13,54 @@
  */
 namespace Fratily\DebugBar\Panel;
 
-use Fratily\DebugBar\Collector\CollectorInterface;
-use Twig\Environment;
-
+use Fratily\DebugBar\Block\BlockInterface;
 
 abstract class AbstractPanel implements PanelInterface{
 
     /**
-     * @var Environment
+     * @var string
      */
-    private $twig;
+    private $name;
 
-    public function __construct(Environment $twig){
-        $this->twig = $twig;
+    /**
+     * @var BlockInterface[]
+     */
+    private $blocks = [];
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getName(){
+        return $this->name;
     }
 
     /**
-     *
-     * @param   CollectorInterface  $collector
-     *
-     * @return  string
+     * {@inheritdoc}
      */
-    public function render(CollectorInterface $collector){
-        if($collector->getPanelClass() !== static::class){
-            return "";
+    public function SetName(string $name){
+        $name   = trim($name);
+
+        if($name === ""){
+            throw new \InvalidArgumentException();
         }
 
-        return $this->twig->render(
-            $this->getTplName(),
-            $this->normalize($collector->collect())
-        );
+        $this->name = $name;
     }
 
     /**
-     * コレクターの値を正規化する
+     * ブロックを登録する
      *
-     * @param   mixed[] $data
+     * @param   BlockInterface  $block
      *
-     * @return  mixed[]
+     * @return  void
      */
-    abstract protected function normalize(array $data);
+    protected function addBlock(BlockInterface $block){
+        $this->blocks[] = $block;
+    }
 
-    /**
-     * Twigテンプレートファイル名を取得する
-     *
-     * @return  string
-     */
-    abstract protected function getTplName();
+    public function getIterator(){
+        foreach($this->blocks as $block){
+            yield $block;
+        }
+    }
 }
