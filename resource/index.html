@@ -401,22 +401,30 @@
             margin: 0;
             width: 100%;
             height: auto;
+            border: 1px #ddd solid;
             padding: 0;
+            background: #ddd;
         }
         .fldb-blk-dl dt{
             float: left;
             margin: 0;
             width: 30%;
             height: auto;
+            border-top: 1px #fff solid;
             padding: 0;
         }
         .fldb-blk-dl dd{
             box-sizing: border-box;
-            margin: 0;
-            width: 100%;
+            margin: 0 0 0 30%;
+            width: 70%;
             height: auto;
-            color: #555;
-            padding: 0 0 0 30%;
+            border-top: 1px #ddd solid;
+            padding: 5px;
+            background: #fff;
+        }
+        .fldb-blk-dl dt:first-of-type,
+        .fldb-blk-dl dd:first-of-type{
+            border: none;
         }
         .fldb-blk-dl dd:after{
             content: "";
