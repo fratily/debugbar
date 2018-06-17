@@ -13,31 +13,21 @@
  */
 namespace Fratily\DebugBar\Panel;
 
+use Fratily\DebugBar\Template;
 use Fratily\DebugBar\Block\MessageListBlock;
 use Psr\Log\LogLevel;
 
 class MessagePanel extends AbstractPanel{
 
-    const LEVEL = [
-        LogLevel::EMERGENCY => "emergency",
-        LogLevel::ALERT     => "alert",
-        LogLevel::CRITICAL  => "critical",
-        LogLevel::ERROR     => "error",
-        LogLevel::WARNING   => "warning",
-        LogLevel::NOTICE    => "notice",
-        LogLevel::INFO      => "info",
-        LogLevel::DEBUG     => "debug",
-    ];
-
-    const ICON  = [
-        LogLevel::EMERGENCY => MessageListBlock::ICON_ERR,
-        LogLevel::ALERT     => MessageListBlock::ICON_ERR,
-        LogLevel::CRITICAL  => MessageListBlock::ICON_ERR,
-        LogLevel::ERROR     => MessageListBlock::ICON_ERR,
-        LogLevel::WARNING   => MessageListBlock::ICON_WARN,
-        LogLevel::NOTICE    => MessageListBlock::ICON_WARN,
-        LogLevel::INFO      => MessageListBlock::ICON_INFO,
-        LogLevel::DEBUG     => MessageListBlock::ICON_NULL,
+    const LV2ICON  = [
+        LogLevel::EMERGENCY => Template::ICON_ERROR,
+        LogLevel::ALERT     => Template::ICON_ERROR,
+        LogLevel::CRITICAL  => Template::ICON_ERROR,
+        LogLevel::ERROR     => Template::ICON_ERROR,
+        LogLevel::WARNING   => Template::ICON_WARN,
+        LogLevel::NOTICE    => Template::ICON_WARN,
+        LogLevel::INFO      => Template::ICON_INFO,
+        LogLevel::DEBUG     => Template::ICON_NULL,
     ];
 
     /**
@@ -47,15 +37,30 @@ class MessagePanel extends AbstractPanel{
 
     /**
      * Constructor
+     *
+     * @param   string  $name
      */
-    public function __construct(){
+    public function __construct(string $name){
         $this->message  = new MessageListBlock();
 
-        $this->addBlock($this->message);
+        parent::__construct($name, [
+            $this->message,
+        ]);
     }
 
+    /**
+     * メッセージを追加する
+     *
+     * @param   string  $message
+     * @param   mixed   $level
+     *
+     * @return  $this
+     */
     public function addMessage(string $message, $level = LogLevel::DEBUG){
-        $this->message->addMessage($message, self::ICON[$level] ?? MessageListBlock::ICON_NULL);
+        $this->message->addMessage(
+            $message,
+            self::LV2ICON[$level] ?? Template::ICON_NULL
+        );
 
         return $this;
     }

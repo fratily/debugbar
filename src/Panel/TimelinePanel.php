@@ -30,20 +30,22 @@ class TimelinePanel extends AbstractPanel{
     /**
      * @var float[]
      */
-    private $lineStart;
+    private $lineStart  = [];
 
     /**
      * Constructor
+     *
+     * @param   float   $start
+     * @param   string  $name
      */
-    public function __construct(float $start){
+    public function __construct(float $start, string $name){
         $this->timeline     = new TimelineBlock();
         $this->start        = $start;
         $this->lineStart    = [];
 
-        $this->timeline->setTitle("TimeLine");
-
-        $this->addBlock($this->timeline);
-
+        parent::__construct($name, [
+            $this->timeline,
+        ]);
     }
 
     /**
@@ -60,7 +62,7 @@ class TimelinePanel extends AbstractPanel{
             throw new \LogicException;
         }
 
-        $this->timeline->setMeasurementTime($time - $this->start);
+        $this->timeline->setExecutionTime($time - $this->start);
     }
 
     /**

@@ -1,6 +1,8 @@
 <dl class="fldb-blk-dl">
-{% for definition as blk %}
+    {% for definition as blk %}
     <dt>{{ definition.term|nl2br }}</dt>
-    <dd>{{ definition.description|nl2br }}</dd>
-{% endfor %}
+    {% for description as definition.description %}
+    <dd>{{ description|nl2br }}</dd>
+    {% endfor %}
+    {% endfor %}
 </dl>

@@ -13,6 +13,7 @@
  */
 namespace Fratily\DebugBar\Block;
 
+use Fratily\DebugBar\Template;
 use Fratily\DebugBar\Block\AbstractBlock;
 
 class TableBlock extends AbstractBlock implements \IteratorAggregate{
@@ -30,47 +31,35 @@ class TableBlock extends AbstractBlock implements \IteratorAggregate{
     /**
      * @var string[][]
      */
-    private $body;
-
-    /**
-     * Constructor
-     */
-    public function __construct(){
-        $this->header   = null;
-        $this->count    = null;
-        $this->body     = [];
-    }
+    private $body   = [];
 
     /**
      * {@inheritdoc}
      */
-    public function getTemplate(){
-        return "block/table.twig";
+    public function __construct(array $header, string $title = null, Template $template = null){
+        if(empty($header)){
+            throw new \InvalidArgumentException();
+        }
+
+        parent::__construct($title, $template ?? new Template(
+            "block/table.twig",
+            Template::T_FILE
+        ));
+
+        $this->count    = count($header);
+        $this->header   = array_map(function($v){
+            if(is_scalar($v)
+                || (is_object($v) && method_exists($v, "__toString"))
+            ){
+                return $v;
+            }
+
+            return "";
+        }, $header);
     }
 
     /**
-     * ヘッダー行を取得する
-     */
-    public function getHeader(){
-        return $this->header;
-    }
-
-    /**
-     * テーブルヘッダーを設定する
-     *
-     * @param   string  ...$columns
-     *
-     * @return  $this
-     */
-    public function setHeader(string ...$columns){
-        $this->header   = $columns;
-        $this->count    = count($columns);
-
-        return $this;
-    }
-
-    /**
-     * デーブルボディーの行を追加する
+     * 行を追加する
      *
      * @param   string  ...$columns
      *
@@ -79,13 +68,44 @@ class TableBlock extends AbstractBlock implements \IteratorAggregate{
      * @throws  \InvalidArgumentException
      */
     public function addRow(string ...$columns){
-        if($this->count !== null && $this->count !== count($columns)){
+        if($this->count !== count($columns)){
             throw new \InvalidArgumentException();
         }
 
         $this->body[]   = $columns;
 
         return $this;
+    }
+
+    /**
+     * 配列を使用して行を追加する
+     *
+     * @param   string  $columns
+     *
+     * @return  $this
+     *
+     * @throws  \InvalidArgumentException
+     */
+    public function addRowByArray(array $columns){
+        return call_user_func_array([$this, "addRow"], $columns);
+    }
+
+    /**
+     * ヘッダーを取得する
+     *
+     * @return  string[]
+     */
+    public function getHeader(){
+        return $this->header;
+    }
+
+    /**
+     * ボディを取得する
+     *
+     * @return  string[][]
+     */
+    public function getBody(){
+        return $this->body;
     }
 
     public function getIterator(){

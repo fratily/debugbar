@@ -21,15 +21,4 @@ interface PanelInterface extends \IteratorAggregate{
      * @return  string
      */
     public function getName();
-
-    /**
-     * パネルの名前を設定する
-     *
-     * @param   string  $name
-     *
-     * @return  void
-     *
-     * @throws  \InvalidArgumentException
-     */
-    public function setName(string $name);
 }

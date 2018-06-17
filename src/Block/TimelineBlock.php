@@ -13,6 +13,7 @@
  */
 namespace Fratily\DebugBar\Block;
 
+use Fratily\DebugBar\Template;
 use Fratily\DebugBar\Block\AbstractBlock;
 
 class TimelineBlock extends AbstractBlock implements \IteratorAggregate{
@@ -20,37 +21,60 @@ class TimelineBlock extends AbstractBlock implements \IteratorAggregate{
     /**
      * @var float
      */
-    private $measurement;
+    private $execution;
 
     /**
      * @var mixed[]
      */
-    private $lines;
-
-    /**
-     * Constructor
-     */
-    public function __construct(){
-        $this->measurement  = null;
-        $this->lines        = [];
-    }
+    private $lines  = [];
 
     /**
      * {@inheritdoc}
      */
-    public function getTemplate(){
-        return "block/timeline.twig";
+    public function __construct(string $title = null, Template $template = null){
+        parent::__construct($title, $template ?? new Template(
+            "block/timeline.twig",
+            Template::T_FILE
+        ));
     }
 
-    public function setMeasurementTime(float $time){
-        $this->measurement  = abs($time);
+    /**
+     * 実行時間を設定する
+     *
+     * @param   float   $time
+     *
+     * @return  void
+     */
+    public function setExecutionTime(float $time){
+        if($time <= 0){
+            throw new \InvalidArgumentException();
+        }
+
+        $this->execution    = $time;
     }
 
+    /**
+     * ラインを追加する
+     *
+     * 同名のラインは上書きされる。
+     *
+     * @param   string  $name
+     * @param   float   $start
+     *  タイムライン開始時間からの相対経過時間
+     * @param   float   $runtime
+     *  ラインの実行時間
+     *
+     * @return  void
+     */
     public function addLine(string $name, float $start, float $runtime){
+        if($runtime < 0){
+            throw new \InvalidArgumentException();
+        }
+
         $this->lines[$name] = [
             "name"      => $name,
-            "start"     => abs($start),
-            "runtime"   => abs($runtime),
+            "start"     => $start,
+            "runtime"   => $runtime,
             "percent"   => [
                 "start"     => null,
                 "runtime"   => null,
@@ -58,30 +82,34 @@ class TimelineBlock extends AbstractBlock implements \IteratorAggregate{
         ];
     }
 
-    public function getIterator(){
-        $measurement    = $this->measurement;
+    /**
+     * 実行時間に対して比較時間の長さをパーセントで取得する
+     *
+     * @param   float   $comp
+     *  比較する時間
+     *
+     * @return  float
+     */
+    private function getProportion(float $comp){
+        $minus  = $comp < 0 ? true : false;
+        $result = round(abs($comp) / $this->execution * 100, 2);
 
-        if($measurement === null){
+        return $minus ? $result * -1 : $result;
+    }
+
+    public function getIterator(){
+        if($this->execution === null){
             throw new \LogicException;
         }
 
-        $result = array_map(
-            function($val) use ($measurement){
-                if($measurement <= $val["start"]){
-                    return null;
-                }
+        foreach($this->lines as $name => $data){
+            $start      = $this->getProportion($data["start"]);
+            $runtime    = $this->getProportion($data["runtime"]);
 
-                $val["percent"]["start"]    = round($val["start"] / $measurement * 100, 2);
-                $val["percent"]["runtime"]  = $measurement < ($val["start"] + $val["runtime"])
-                    ? round(($measurement - $val["start"]) / $measurement * 100, 2)
-                    : round($val["runtime"] / $measurement * 100, 2)
-                ;
+            $this->lines[$name]["percent"]["start"]     = $start;
+            $this->lines[$name]["percent"]["runtime"]   = $runtime;
+        }
 
-                return $val;
-            },
-            array_values($this->lines)
-        );
-
-        yield from $result;
+        yield from array_values($this->lines);
     }
 }

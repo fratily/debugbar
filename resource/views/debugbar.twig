@@ -25,7 +25,11 @@
                         {% if blk.title is not null %}
                         <h2>{{ blk.title }}</h2>
                         {% endif %}
-                        {% include blk.template with {'blk': blk} only %}
+                        {% if blk.template.type == "file" %}
+                            {% include blk.template.template with {'blk': blk} only %}
+                        {% elseif blk.template.type == "text" %}
+                            {% include template_from_string(blk.template.template) with {'blk': blk} only %}
+                        {% endif %}
                     </section>
                     {% endfor %}
                 </div>

@@ -13,6 +13,7 @@
  */
 namespace Fratily\DebugBar\Block;
 
+use Fratily\DebugBar\Template;
 use Fratily\DebugBar\Block\AbstractBlock;
 
 class TabsBlock extends AbstractBlock implements \IteratorAggregate{
@@ -25,8 +26,11 @@ class TabsBlock extends AbstractBlock implements \IteratorAggregate{
     /**
      * {@inheritdoc}
      */
-    public function getTemplate(){
-        return "block/tabs.twig";
+    public function __construct(string $title = null, Template $template = null){
+        parent::__construct($title, $template ?? new Template(
+            "block/tabs.twig",
+            Template::T_FILE
+        ));
     }
 
     /**

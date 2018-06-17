@@ -13,6 +13,7 @@
  */
 namespace Fratily\DebugBar\Block;
 
+use Fratily\DebugBar\Template;
 use Fratily\DebugBar\Block\AbstractBlock;
 
 class DefinitionListBlock extends AbstractBlock implements \IteratorAggregate{
@@ -20,34 +21,36 @@ class DefinitionListBlock extends AbstractBlock implements \IteratorAggregate{
     /**
      * @var string[][]
      */
-    private $list;
-
-    /**
-     * Constructor
-     */
-    public function __construct(){
-        $this->list = [];
-    }
+    private $list   = [];
 
     /**
      * {@inheritdoc}
      */
-    public function getTemplate(){
-        return "block/dl.twig";
+    public function __construct(string $title = null, Template $template = null){
+        parent::__construct($title, $template ?? new Template(
+            "block/dl.twig",
+            Template::T_FILE
+        ));
     }
 
     /**
      * 定義を追加する
      *
      * @param   string  $term
-     * @param   string  $description
+     * @param   mixed|mixed[]   $description
      *
      * @return  $this
      */
-    public function addDefinition(string $term, string $description){
+    public function addDefinition(string $term, $description){
         $this->list[]   = [
             "term"          => $term,
-            "description"   => $description,
+            "description"   => array_filter(
+                (array)$description,
+                function($v){
+                    return is_scalar($v)
+                        || (is_object($v) && method_exists($v, "__toString"));
+                }
+            ),
         ];
 
         return $this;

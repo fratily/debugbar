@@ -24,11 +24,15 @@ class DumpPanel extends AbstractPanel{
 
     /**
      * Constructor
+     *
+     * @param   string  $name
      */
-    public function __construct(){
+    public function __construct(string $name){
         $this->dump = new DumpListBlock();
 
-        $this->addBlock($this->dump);
+        parent::__construct($name, [
+            $this->dump,
+        ]);
     }
 
     /**

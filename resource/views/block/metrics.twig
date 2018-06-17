@@ -1,13 +1,19 @@
-<div class="fldb-blk-metrics">
-    {% for metric as blk %}
+<ul class="fldb-blk-metrics">
+    {% for metric in blk %}
+    <li>
     <div>
+        {% if metric.type == "text" %}
         <span>{{ metric.value.data }}</span>
         {% if metric.value.unit is not null %}
         <span>{{ metric.value.unit }}</span>
+        {% endif %}
+        {% elseif metric.type == "icon" %}
+        <span class="fldb-icon-{{ metric.value.icon }}"></span>
         {% endif %}
     </div>
     <div>
         <span>{{ metric.name }}</span>
     </div>
+    </li>
     {% endfor %}
-</div>
+</ul>

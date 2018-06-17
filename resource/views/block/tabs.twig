@@ -1,16 +1,20 @@
 {% set id = blk.id %}
 <div class="fldb-blk-tabs">
     {% for tab in blk %}
-    <input name="fldb-blk-tabs-{{ id }}" id="fldb-blk-tabs-{{ id }}-{{ tab.name }}" type="radio" checked>
+    <input name="fldb-blk-tabs-{{ id }}" id="fldb-blk-tabs-{{ id }}-{{ tab.name }}" type="radio" {% if loop.index == 1 %}checked{% endif %}>
     <label for="fldb-blk-tabs-{{ id }}-{{ tab.name }}">Metrics</label>
     {% endfor %}
     {% for tab in blk %}
     <div>
         <section>
-            {% if tab.title is not null %}
-            <h2>{{ tab.title }}</h2>
+            {% if tab.block.title is not null %}
+            <h2>{{ tab.block.title }}</h2>
             {% endif %}
-            {% include tab.template with {'blk': tab} only %}
+            {% if tab.block.template.type == "file" %}
+                {% include tab.block.template.template with {'blk': tab.block} only %}
+            {% elseif tab.block.template.type == "text" %}
+                {% include template_from_string(tab.block.template.template) with {'blk': tab.block} only %}
+            {% endif %}
         </section>
     </div>
     {% endfor %}

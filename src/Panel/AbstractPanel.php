@@ -27,6 +27,20 @@ abstract class AbstractPanel implements PanelInterface{
      */
     private $blocks = [];
 
+    public function __construct(string $name, array $blocks = []){
+        $name   = trim($name);
+        $blocks = array_filter($blocks, function($v){
+            return $v instanceof BlockInterface;
+        });
+
+        if($name === ""){
+            throw new \InvalidArgumentException();
+        }
+
+        $this->name     = $name;
+        $this->blocks   = $blocks;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -34,33 +48,18 @@ abstract class AbstractPanel implements PanelInterface{
         return $this->name;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function SetName(string $name){
-        $name   = trim($name);
-
-        if($name === ""){
-            throw new \InvalidArgumentException();
-        }
-
-        $this->name = $name;
-    }
-
-    /**
-     * ブロックを登録する
-     *
-     * @param   BlockInterface  $block
-     *
-     * @return  void
-     */
-    protected function addBlock(BlockInterface $block){
-        $this->blocks[] = $block;
-    }
-
     public function getIterator(){
+        $this->beforeGetIterator();
+
         foreach($this->blocks as $block){
             yield $block;
         }
+    }
+
+    /**
+     * getIteratorの前に実行される
+     */
+    protected function beforeGetIterator(){
+
     }
 }

@@ -23,18 +23,9 @@ interface BlockInterface{
     public function getTitle();
 
     /**
-     * ブロックのタイトルを登録する
+     * テンプレートを取得する
      *
-     * @param   string  $title
-     *
-     * @return  void
+     * @return  \Fratily\DebugBar\Template
      */
-    public function setTitle(string $title);
-
-    /**
-     * テンプレートファイル名を取得する
-     *
-     * @return  string
-     */
-    public function getTemplate();
+    public function getTemplate(): \Fratily\DebugBar\Template;
 }

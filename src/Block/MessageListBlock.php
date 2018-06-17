@@ -13,46 +13,24 @@
  */
 namespace Fratily\DebugBar\Block;
 
+use Fratily\DebugBar\Template;
 use Fratily\DebugBar\Block\AbstractBlock;
 
 class MessageListBlock extends AbstractBlock implements \IteratorAggregate{
 
-    const ICON_NULL = 0;
-    const ICON_INFO = 1;
-    const ICON_WARN = 2;
-    const ICON_ERR  = 3;
-
-    const ICON_NAMES    = [
-        self::ICON_NULL => "null",
-        self::ICON_INFO => "info",
-        self::ICON_WARN => "warn",
-        self::ICON_ERR  => "error",
-    ];
-
     /**
      * @var string[][]
      */
-    private $messages;
-
-    /**
-     * Constructor
-     */
-    public function __construct(){
-        $this->messages = [];
-    }
+    private $messages   = [];
 
     /**
      * {@inheritdoc}
      */
-    public function getTemplate(){
-        return "block/message_list.twig";
-    }
-
-    /**
-     * ヘッダー行を取得する
-     */
-    public function getHeader(){
-        return $this->header;
+    public function __construct(string $title = null, Template $template = null){
+        parent::__construct($title, $template ?? new Template(
+            "block/message_list.twig",
+            Template::T_FILE
+        ));
     }
 
     /**
@@ -65,13 +43,9 @@ class MessageListBlock extends AbstractBlock implements \IteratorAggregate{
      *
      * @throws  \InvalidArgumentException
      */
-    public function addMessage(string $message, int $icon = self::ICON_NULL){
-        if(!array_key_exists($icon, self::ICON_NAMES)){
-            throw new \InvalidArgumentException();
-        }
-
+    public function addMessage(string $message, int $icon = Template::ICON_NULL){
         $this->messages[]   = [
-            "icon"      => self::ICON_NAMES[$icon],
+            "icon"      => Template::getIconName($icon),
             "message"   => trim($message),
         ];
 

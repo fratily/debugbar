@@ -16,43 +16,37 @@ namespace Fratily\DebugBar\Block;
 use Fratily\DebugBar\Template;
 use Fratily\DebugBar\Block\AbstractBlock;
 
-class DumpListBlock extends AbstractBlock implements \IteratorAggregate{
-
-    /**
-     * @var mixed[]
-     */
-    private $values = [];
+class PHPInfoBlock extends AbstractBlock{
 
     /**
      * {@inheritdoc}
      */
     public function __construct(string $title = null, Template $template = null){
         parent::__construct($title, $template ?? new Template(
-            "block/dump_list.twig",
+            "block/phpinfo.twig",
             Template::T_FILE
         ));
     }
 
     /**
-     * 値を追加する
+     * phpinfo()の結果を取得する
      *
-     * @param   mixed   $value
-     * @param   string  $file
-     * @param   int $line
-     *
-     * @return  $this
+     * @return  string
      */
-    public function addValue($value, string $file, int $line){
-        $this->values[] = [
-            "value" => $value,
-            "file"  => $file,
-            "line"  => $line,
-        ];
+    public function getInfo(){
+        ob_start();
+        phpinfo();
 
-        return $this;
-    }
+        $dom    = new \DOMDocument();
+        $new    = new \DOMDocument();
+        @$dom->loadHTML(ob_get_clean());
 
-    public function getIterator(){
-        yield from $this->values;
+        $list   = (new \DOMXPath($dom))->query("//div[@class='center']/*");
+
+        for($i = 0; $i < $list->length; $i++){
+            $new->appendChild($new->importNode($list->item($i), true));
+        }
+
+        return $new->saveHTML();
     }
 }

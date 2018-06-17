@@ -1,10 +1,10 @@
 <ul class="fldb-blk-list fldb-blk-list_timeline">
-{% for line in blk %}
+    {% for line in blk %}
     {% if line is not null %}
     <li>
         <div style="left:{{ line.percent.start }}%;width:{{ line.percent.runtime }}%;"></div>
         <div>{{ line.name }}({{ line.runtime }}ms)</div>
     </li>
     {% endif %}
-{% endfor %}
+    {% endfor %}
 </ul>
