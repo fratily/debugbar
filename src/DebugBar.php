@@ -131,6 +131,9 @@ class DebugBar{
             $this->twig->addExtension(
                 new \Twig\Extension\StringLoaderExtension
             );
+            $this->twig->addFilter(new \Twig_Filter("md5", function($v){
+                return md5($v);
+            }));
         }
     }
 }
