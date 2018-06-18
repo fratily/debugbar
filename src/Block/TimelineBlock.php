@@ -42,6 +42,7 @@ class TimelineBlock extends AbstractBlock implements \IteratorAggregate{
      * 実行時間を設定する
      *
      * @param   float   $time
+     *  計測開始時刻から計測終了時刻までの経過時間(単位:秒)
      *
      * @return  void
      */
@@ -54,15 +55,15 @@ class TimelineBlock extends AbstractBlock implements \IteratorAggregate{
     }
 
     /**
-     * ラインを追加する
+     * タイムラインを追加する
      *
-     * 同名のラインは上書きされる。
+     * 同名のタイムラインは上書きされる。
      *
      * @param   string  $name
      * @param   float   $start
-     *  タイムライン開始時間からの相対経過時間
+     *  タイムライン開始時刻からの相対経過時間(単位:秒)
      * @param   float   $runtime
-     *  ラインの実行時間
+     *  タイムラインの実行時間(単位:秒)
      *
      * @return  void
      */
@@ -75,10 +76,6 @@ class TimelineBlock extends AbstractBlock implements \IteratorAggregate{
             "name"      => $name,
             "start"     => $start,
             "runtime"   => $runtime,
-            "percent"   => [
-                "start"     => null,
-                "runtime"   => null,
-            ],
         ];
     }
 
@@ -86,15 +83,13 @@ class TimelineBlock extends AbstractBlock implements \IteratorAggregate{
      * 実行時間に対して比較時間の長さをパーセントで取得する
      *
      * @param   float   $comp
-     *  比較する時間
+     *  比較する時間(単位:秒)
      *
      * @return  float
+     *  少数第二位までのパーセント値
      */
     private function getProportion(float $comp){
-        $minus  = $comp < 0 ? true : false;
-        $result = round(abs($comp) / $this->execution * 100, 2);
-
-        return $minus ? $result * -1 : $result;
+        return round($comp / $this->execution * 100, 2);
     }
 
     public function getIterator(){
@@ -102,14 +97,21 @@ class TimelineBlock extends AbstractBlock implements \IteratorAggregate{
             throw new \LogicException;
         }
 
-        foreach($this->lines as $name => $data){
-            $start      = $this->getProportion($data["start"]);
+        foreach($this->lines as $data){
+            $start      = $this->getProportion(abs($data["start"]));
             $runtime    = $this->getProportion($data["runtime"]);
 
-            $this->lines[$name]["percent"]["start"]     = $start;
-            $this->lines[$name]["percent"]["runtime"]   = $runtime;
-        }
+            if($data["start"] < 0){
+                $start  = $start * -1;
+            }
 
-        yield from array_values($this->lines);
+            $data["runtime"]    = round($data["runtime"] * 1000, 2);
+            $data["percent"]    = [
+                    "start"     => $start,
+                    "runtime"   => $runtime,
+            ];
+
+            yield $data;
+        }
     }
 }
