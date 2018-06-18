@@ -1,7 +1,7 @@
 {% set id = blk.id %}
 <div class="fldb-blk-tabs">
     {% for tab in blk %}
-    <input name="fldb-blk-tabs-{{ id }}" id="fldb-blk-tabs-{{ id }}-{{ tab.name }}" type="radio" {% if loop.index == 1 %}checked{% endif %}>
+    <input name="fldb-blk-tabs-{{ id }}" id="fldb-blk-tabs-{{ id }}-{{ tab.name|md5 }}" type="radio" {% if loop.index == 1 %}checked{% endif %}>
     <label for="fldb-blk-tabs-{{ id }}-{{ tab.name|md5 }}">{{ tab.name }}</label>
     {% endfor %}
     {% for tab in blk %}
