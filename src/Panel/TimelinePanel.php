@@ -35,10 +35,10 @@ class TimelinePanel extends AbstractPanel{
     /**
      * Constructor
      *
-     * @param   float   $start
      * @param   string  $name
+     * @param   float   $start
      */
-    public function __construct(float $start, string $name){
+    public function __construct(string $name, float $start){
         $this->timeline     = new TimelineBlock();
         $this->start        = $start;
         $this->lineStart    = [];
