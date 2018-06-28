@@ -32,6 +32,8 @@ class TimelinePanel extends AbstractPanel{
      */
     private $lineStart  = [];
 
+    private $setEndTime = false;
+
     /**
      * Constructor
      *
@@ -61,6 +63,8 @@ class TimelinePanel extends AbstractPanel{
         if($time <= $this->start){
             throw new \LogicException;
         }
+
+        $this->setEndTime   = true;
 
         $this->timeline->setExecutionTime($time - $this->start);
     }
@@ -117,5 +121,11 @@ class TimelinePanel extends AbstractPanel{
         );
 
         return $this;
+    }
+
+    protected function beforeGetIterator(){
+        if(!$this->setEndTime){
+            $this->setEndTime(microtime(true));
+        }
     }
 }
