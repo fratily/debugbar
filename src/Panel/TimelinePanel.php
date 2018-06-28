@@ -96,4 +96,26 @@ class TimelinePanel extends AbstractPanel{
             $time - $this->lineStart[$name]
         );
     }
+
+    /**
+     * タイムラインを追加する
+     *
+     * @param   string  $name
+     *  タイムライン名
+     * @param   float   $start
+     *  タイムライン開始時間
+     * @param   float   $end
+     *  タイムライン終了時間
+     *
+     * @return  $this
+     */
+    public function addLine(string $name, float $start, float $end){
+        $this->timeline->addLine(
+            $name,
+            $start - $this->start,
+            $end - $start
+        );
+
+        return $this;
+    }
 }
